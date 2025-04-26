@@ -1,4 +1,4 @@
-import Sidebar from "../common/Sidebar";
+import Sidebar from "../../admin-dashboard/common/Sidebar";
 import Header from "../../../header/dashboard-header";
 import SettingsTabs from "./components/index";
 import Footer from "../common/Footer";

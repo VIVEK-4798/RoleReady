@@ -40,6 +40,19 @@ import Terms from "./pages/others/terms";
 import Invoice from "./pages/others/invoice";
 import AdminDashboard from "./pages/dashboard/admin-dashboard/dashboard";
 import AdminBooking from "./pages/dashboard/admin-dashboard/booking";
+import ClaimedBusiness from "./pages/dashboard/admin-dashboard/claim-business";
+import City from "./pages/dashboard/admin-dashboard/city";
+import Service from "./pages/dashboard/admin-dashboard/services";
+import Regions from "./pages/dashboard/admin-dashboard/region";
+import Category from "./pages/dashboard/admin-dashboard/category";
+import Users from "./pages/dashboard/admin-dashboard/users";
+import AdminAddUser from "./pages/dashboard/admin-dashboard/add-user";
+import Venue from "./pages/dashboard/admin-dashboard/venue";
+import AdminAddVenue from "./pages/dashboard/admin-dashboard/add-venue";
+import AdminAddVendor from "./pages/dashboard/admin-dashboard/add-vendor";
+import Vendors from "./pages/dashboard/admin-dashboard/vendors";
+import Packages from "./pages/dashboard/admin-dashboard/packages";
+import Email from "./pages/dashboard/admin-dashboard/email";
 import DBDashboard from "./pages/dashboard/dashboard/db-dashboard";
 import DBBooking from "./pages/dashboard/dashboard/db-booking";
 import DBWishlist from "./pages/dashboard/dashboard/db-wishlist";
@@ -152,7 +165,26 @@ function App() {
               <Route path="admin-dashboard">
                   <Route path="dashboard" element={<AdminDashboard />} />
                   <Route path="booking" element={<AdminBooking />} />
-                </Route>
+                  <Route path="claim-business" element={<ClaimedBusiness />} />
+                  <Route path="packages" element={<Packages />} />
+                  <Route path="mail" element={<Email />} />
+                  <Route path="city" element={<City />} />
+                  <Route path="regions" element={<Regions />} />
+                  <Route path="categories" element={<Category />} />
+                  <Route path="services" element={<Service />} />
+                  <Route path="settings" element={<DBSettings />} />
+                  <Route path="venues" element={<Venue />} />
+                  <Route path="venue/:mode" element={<AdminAddVenue />} />
+                  <Route path="vendors" element={<Vendors />} />
+                  <Route path="vendor/:mode" element={<AdminAddVendor />} />
+                  <Route path="users" element={<Users />} />
+                  <Route path="user/:mode" element={<AdminAddUser />} />
+                  {/* 
+                  <Route path="booking" element={<AdminBooking />} />
+                  <Route path="hotels" element={<BVAdminHotel />} />
+                  <Route path="recovery" element={<BDAdminRecovery />} />
+                   */}
+              </Route>
 
               <Route path="vendor-dashboard">
                 <Route path="dashboard" element={<VendorDashboard />} />

@@ -38,8 +38,8 @@ const Sidebar = () => {
       links: [
         { title: "All Vendor", href: "vendors", allowedRole: ["admin"] },
         { title: "Add Vendor", href: "vendor/add", allowedRole: ["admin"] },
-        { title: "All Services", href: "vendors", allowedRole: ["vendor-user"] },
-        { title: "Add Sevice", href: "vendor/add", allowedRole: ["vendor-user"] },
+        // { title: "All Services", href: "vendors", allowedRole: ["vendor-user"] },
+        // { title: "Add Sevice", href: "vendor/add", allowedRole: ["vendor-user"] },
       ],
     },
     {
