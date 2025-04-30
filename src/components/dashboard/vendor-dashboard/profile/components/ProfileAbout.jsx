@@ -2,158 +2,39 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import NicheSection from './NicheSection ';
 import StreaksSection from './StreaksSection';
+import AboutPopupPage from './content/AboutPopupPage';
+import ResumePopupPage from './content/ResumePopupPage';
+import SkillsPopupPage from './content/SkillsPopupPage';
+import ExperiencePopupPage from './content/ExperiencePopupPage';
+import EducationPopupPage from './content/EducationPopupPage';
+import CertificatePopupPage from './content/CertificatePopupPage';
+import ProjectsPopupPage from './content/ProjectsPopupPage';
 
 const ProfileAbout = () => {
   return (
          <div className="row">
             <div className="col-lg-8 bg-white shadow">
-                <div className="rounded p-3">
-                    <div className='d-flex justify-between items-start p-3'>
-                        <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-2">About</h5>
-                        <p className="text-16 text-light-1 mb-2">
-                            Craft an engaging story in your bio and make meaningful connections with peers and recruiters alike!
-                        </p>
-                        <Link to="#" className="text-blue-1">Add About</Link>
-                        </div>
-                        <div className="">
-                        <img
-                            src="/img/profile/about.webp"
-                            alt="about"
-                            style={{ width: 140, height: 110 }}
-                        />
-                        </div>
-                    </div>
-                </div>
+                <AboutPopupPage/>
                 <hr className="border-t border-gray-100 mb-8"/>
 
-                <div className="rounded p-3 mb-12">
-                    <div className="d-flex justify-between items-start p-3">
-                    <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-15">Resume</h5>
-                        <p className="text-16 text-light-1 mb-10">Add your Resume & get your profile filled in a click!</p>
-                        <Link to="#" className="text-blue-1">Upload Resume</Link>
-                    </div>
-                    <div className="">
-                        <img
-                        src="/img/profile/resume.webp"
-                        alt="resume"
-                        style={{ width: 140, height: 110 }}
-                        />
-                    </div>
-                    </div>
-                </div>
+                <ResumePopupPage/>
                 <hr className="border-t border-gray-300 mb-12"/>
 
-                <div className="rounded p-3 mb-12">
-                    <div className="d-flex justify-between items-start p-3">
-                    <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-15">Skills</h5>
-                        <p className="text-16 text-light-1 mb-10">Spotlight your unique skills for recruiters!</p>
-                        <Link to="#" className="text-blue-1">Add Skills</Link>
-                    </div>
-                    <div className="">
-                        <img
-                        src="/img/profile/skills.webp"
-                        alt="skills"
-                        style={{ width: 140, height: 110 }}
-                        />
-                    </div>
-                    </div>
-                </div>
+                <SkillsPopupPage/>
                 <hr className="border-t border-gray-300 mb-12"/>
 
-                <div className="rounded p-3 mb-12">
-                    <div className="d-flex justify-between items-start p-3">
-                    <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-15">Work Experience</h5>
-                        <p className="text-16 text-light-1 mb-10">Narrate your professional journey to new career heights!</p>
-                        <Link to="#" className="text-blue-1">Add Work Experience</Link>
-                    </div>
-                    <div className="">
-                        <img
-                        src="/img/profile/work_experience.webp"
-                        alt="work-experience"
-                        style={{ width: 140, height: 110 }}
-                        />
-                    </div>
-                    </div>
-                </div>
+                <ExperiencePopupPage/>
                 <hr className="border-t border-gray-300 mb-12"/>
 
-                <div className="rounded p-3 mb-12">
-                    <div className="d-flex justify-between items-start p-3">
-                    <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-12">Education</h5>
-                        <p className="text-16 text-light-1 mb-10">Showcase your academic journey to your dream opportunities!</p>
-                        <Link to="#" className="text-blue-1">Add Education</Link>
-                    </div>
-                    <div className="">
-                        <img
-                        src="/img/profile/education.webp"
-                        alt="education"
-                        style={{ width: 140, height: 110 }}
-                        />
-                    </div>
-                    </div>
-                </div>
+                <EducationPopupPage/>
                 <hr className="border-t border-gray-300 mb-12"/>
 
-                <div className="rounded p-3 mb-12">
-                    <div className="d-flex justify-between items-start p-3">
-                    <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-12">Certificates</h5>
-                        <p className="text-16 text-light-1 mb-10">
-                        Highlight your professional certifications and achievements to stand out from the crowd!
-                        </p>
-                        <Link to="#" className="text-blue-1">Add Certificate</Link>
-                    </div>
-                    <div className="">
-                        <img
-                        src="/img/profile/certificate.webp"
-                        alt="certificate"
-                        style={{ width: 140, height: 110}}
-                        />
-                    </div>
-                    </div>
-                </div>
+                <CertificatePopupPage/>
                 <hr className="border-t border-gray-300 mb-12"/>
 
-                <div className="rounded p-3 mb-12">
-                    <div className="d-flex justify-between items-start p-3">
-                    <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-12">Projects</h5>
-                        <p className="text-16 text-light-1 mb-10">Unveil your projects to the world and pave your path to professional greatness!</p>
-                        <Link to="#" className="text-blue-1">Add Projects</Link>
-                    </div>
-                    <div className="">
-                        <img
-                        src="/img/profile/projects.webp"
-                        alt="projects"
-                        style={{ width: 140, height: 110 }}
-                        />
-                    </div>
-                    </div>
-                </div>
+                <ProjectsPopupPage/>
                 <hr className="border-t border-gray-300 mb-12"/>
 
-                <div className="rounded p-3 mb-12">
-                    <div className="d-flex justify-between items-start p-3">
-                    <div className="flex flex-col">
-                        <h5 className="text-20 fw-600 mb-12">Achievement</h5>
-                        <p className="text-16 text-light-1 mb-10">Broadcast your triumphs and make a remarkable impression on industry leaders!</p>
-                        <Link to="#" className="text-blue-1">Add Achievement</Link>
-                    </div>
-                    <div className="">
-                        <img
-                        src="/img/profile/achievements.webp"
-                        alt="achievement"
-                        style={{ width: 140, height: 110 }}
-                        />
-                    </div>
-                    </div>
-                </div>
-                <hr className="border-t border-gray-300 mb-12"/>
                     <StreaksSection/>
                 </div>
               {/* Right Sidebar Cards */}

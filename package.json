@@ -20,6 +20,7 @@
     "cal-heatmap": "^4.2.4",
     "chart.js": "^4.4.0",
     "google-map-react": "^2.2.1",
+    "lucide-react": "^0.503.0",
     "photoswipe": "^5.4.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
