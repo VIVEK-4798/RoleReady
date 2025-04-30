@@ -15,10 +15,16 @@ const metadata = {
 
 const LogIn = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     const user = sessionStorage.getItem("user");
-    if (user === "user") navigate("/vendor-dashboard/dashboard");
+    if (user === "user") {
+      navigate("/vendor-dashboard/dashboard");
+    } else if (user === "admin") {
+      navigate("/admin-dashboard/dashboard");
+    }
   }, []);
+
   return (
     <>
       <MetaComponent meta={metadata} />
@@ -28,7 +34,7 @@ const LogIn = () => {
       {/* header top margin */}
 
       <DefaultHeader />
-      {/* End Header 1 */}
+      {/* End Header */}
 
       <section className="layout-pt-lg layout-pb-lg bg-blue-2">
         <div className="container">
@@ -36,7 +42,7 @@ const LogIn = () => {
             <div className="col-xl-6 col-lg-7 col-md-9">
               <div className="px-50 py-50 sm:px-20 sm:py-20 bg-white shadow-4 rounded-4">
                 <LoginForm />
-                {/* End .Login */}
+                {/* End LoginForm */}
 
                 <div className="row y-gap-20 pt-30">
                   <div className="col-12">
@@ -59,10 +65,10 @@ const LogIn = () => {
       {/* End login section */}
 
       <CallToActions />
-      {/* End Call To Actions Section */}
+      {/* End Call To Actions */}
 
       <DefaultFooter />
-      {/* End Call To Actions Section */}
+      {/* End Footer */}
     </>
   );
 };

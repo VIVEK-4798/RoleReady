@@ -115,6 +115,7 @@ const Sidebar = () => {
 
   const logout = () => {
     localStorage.clear();
+    sessionStorage.clear();
     navigate("/");
   };
 
@@ -218,15 +219,16 @@ const Sidebar = () => {
 
       {/* Logout */}
       <div className="sidebar__item">
-        <a
-          href="/"
-          onClick={logout}
-          className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
-        >
-          <img src="/img/dashboard/sidebar/log-out.svg" alt="image" className="mr-15" />
-          Logout
-        </a>
-      </div>
+  <button
+    onClick={logout}
+    className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
+    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+  >
+    <img src="/img/dashboard/sidebar/log-out.svg" alt="image" className="mr-15" />
+    Logout
+  </button>
+</div>
+
     </div>
   );
 };
