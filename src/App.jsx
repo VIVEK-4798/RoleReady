@@ -62,6 +62,7 @@ import VendorBooking from "./pages/dashboard/vendor-dashboard/booking";
 import BVVendorHotel from "./pages/dashboard/vendor-dashboard/hotels";
 import BDVendorRecovery from "./pages/dashboard/vendor-dashboard/recovery";
 import VendorDashboard from "./pages/dashboard/vendor-dashboard/dashboard";
+import VendorProfile from "./pages/dashboard/vendor-dashboard/profile";
 import HotelListPage1 from "./pages/hotel/hotel-list-v1";
 import HotelListPage2 from "./pages/hotel/hotel-list-v2";
 import HotelListPage3 from "./pages/hotel/hotel-list-v3";
@@ -188,6 +189,7 @@ function App() {
 
               <Route path="vendor-dashboard">
                 <Route path="dashboard" element={<VendorDashboard />} />
+                <Route path="profile" element={<VendorProfile />} />
 
                 {/* marketing sub section starts*/}
                 <Route path="overview" element={<VendorMarketingOverview />} />

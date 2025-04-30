@@ -179,6 +179,20 @@ const Sidebar = () => {
             Dashboard
           </Link>
         </div>
+        <div className="sidebar__item ">
+          <Link
+            to="/vendor-dashboard/profile"
+            className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
+          >
+            <img
+              src="/img/avatars/5.png"
+              alt="profile icon"
+              style={{ width: "26px", height: "26px", objectFit: "cover" }}
+              className="mr-15"
+            />
+            Profile
+          </Link>
+        </div>
         {/* End accordion__item */}
 
         {/* <div className="sidebar__item ">

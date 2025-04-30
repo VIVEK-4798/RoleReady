@@ -14,7 +14,7 @@ function Footer() {
           <div className="row y-gap-20 items-center">
             <div className="col-auto">
               <div className="text-14 lh-14 mr-30">
-                © {new Date().getFullYear()} GoTrip LLC All rights reserved.
+                © {new Date().getFullYear()} Startups24x7 LLC All rights reserved.
               </div>
             </div>
 
