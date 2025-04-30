@@ -138,30 +138,13 @@ const EducationPopupPage = () => {
               <button
                 type="button"
                 onClick={() => setShowPopup(false)}
-                style={{
-                  backgroundColor: "#D1D5DB",
-                  color: "#1F2937",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.375rem",
-                  fontSize: "0.875rem",
-                  border: "none",
-                  cursor: "pointer",
-                }}
+                className="cancel-button"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                style={{
-                  marginLeft: "0.5rem",
-                  backgroundColor: "#2563EB",
-                  color: "white",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.375rem",
-                  fontSize: "0.875rem",
-                  border: "none",
-                  cursor: "pointer",
-                }}
+                className="save-button"
               >
                 Save
               </button>

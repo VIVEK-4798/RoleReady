@@ -70,28 +70,11 @@ const SkillsPopupPage = () => {
 
       {showPopup && (
         <div
-          className="overlay"
-          onClick={handleOverlayClick}
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}
+        className="popup-main overlay"
+        onClick={handleOverlayClick}
         >
           <div
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "0.5rem",
-              boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
-              width: "100%",
-              maxWidth: "640px",
-              padding: "1.5rem",
-              position: "relative",
-            }}
+            className="popup-second"
           >
             <h3
               style={{
@@ -170,29 +153,12 @@ const SkillsPopupPage = () => {
             >
               <button
                 onClick={() => setShowPopup(false)}
-                style={{
-                  backgroundColor: "#D1D5DB",
-                  color: "#1F2937",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.375rem",
-                  fontSize: "0.875rem",
-                  border: "none",
-                  cursor: "pointer",
-                }}
+                className="cancel-button"
               >
                 Cancel
               </button>
               <button
-                style={{
-                  marginLeft: "0.5rem",
-                  backgroundColor: "#2563EB",
-                  color: "white",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.375rem",
-                  fontSize: "0.875rem",
-                  border: "none",
-                  cursor: "pointer",
-                }}
+                className="save-button"
               >
                 Save
               </button>

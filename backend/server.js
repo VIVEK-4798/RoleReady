@@ -31,6 +31,7 @@ const claimService = require('./service/claimService.js');
 const footerService = require('./service/footerService.js');
 const packagesService = require('./service/packagesService.js');
 const emailService = require('./service/emailService.js');
+const profileService = require('./service/profileService.js');
 
 // routes
 app.use('/api/user', userService);
@@ -48,6 +49,8 @@ app.use('/api/footer', footerService);
 app.use('/api/package', packagesService);
 app.use('/api/email', emailService);
 app.use("", googleAuth);
+app.use('/api/profile', profileService);
+
 
 
 

@@ -29,16 +29,19 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         setFormData({ email: "", password: "", role: "user" });
-
-        const userId = response.data.userData.user_id;
-        const userRole = response.data.userData.role;
-
+      
+        const userData = response.data.userData;
+        const userId = userData.user_id;
+        const userRole = userData.role;
+      
+        localStorage.setItem("user", JSON.stringify(userData));
+      
         localStorage.setItem(`${userRole}Id`, userId);
         localStorage.setItem("role", userRole);
         sessionStorage.setItem("user", userRole);
-
+      
         toast.success("Login successful!");
-
+      
         setTimeout(() => {
           if (state?.type && state?.id) {
             navigate(`/${state.type}/${state.id}`);
@@ -48,11 +51,12 @@ const LoginForm = () => {
             } else if (userRole === "user") {
               navigate("/vendor-dashboard/dashboard");
             } else {
-              navigate("/"); // fallback if role is unexpected
+              navigate("/");
             }
           }
         }, 1000);        
-      } else {
+      }
+       else {
         toast.error("Something went wrong.");
       }
     } catch (error) {
