@@ -32,12 +32,14 @@ const ExperiencePopupPage = () => {
     try {
       const res = await axios.get(`${api}/api/profile/get-experience/${user_id}`);
       if (res.data.experience) {
-        setSavedExperience(res.data.experience);
+        const parsedExperience = JSON.parse(res.data.experience); // Parse the stringified JSON
+        setSavedExperience(parsedExperience);
       }
     } catch (err) {
       console.error("Error fetching experience:", err);
     }
   };
+  
 
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("overlay")) {

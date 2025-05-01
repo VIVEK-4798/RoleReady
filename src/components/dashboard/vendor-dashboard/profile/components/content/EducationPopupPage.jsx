@@ -35,12 +35,14 @@ const EducationPopupPage = () => {
     try {
       const res = await axios.get(`${api}/api/profile/get-education/${user_id}`);
       if (res.data.education) {
-        setSavedEducation(res.data.education);
+        const parsedEducation = JSON.parse(res.data.education); // Parse JSON string
+        setSavedEducation(parsedEducation);
       }
     } catch (err) {
       console.error("Error fetching education:", err);
     }
   };
+  
 
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("overlay")) {

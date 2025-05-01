@@ -258,6 +258,107 @@ router.post('/save-education', (req, res) => {
   });
 });
 
+// GET Certificate Info
+router.get('/get-certificate/:user_id', (req, res) => {
+  const userId = req.params.user_id;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'user_id is required' });
+  }
+
+  const query = `SELECT certificate FROM profile_info WHERE user_id = ?`;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching certificate info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No certificate info found', certificate: [] });
+    }
+
+    res.status(200).json({
+      message: 'Certificate info retrieved successfully',
+      certificate: results[0].certificate
+    });
+  });
+});
+
+// POST Certificate Info
+router.post('/save-certificate', (req, res) => {
+  const { user_id, certificate } = req.body;
+
+  if (!user_id || !certificate) {
+    return res.status(400).json({ message: 'user_id and certificate are required' });
+  }
+
+  const query = `
+    INSERT INTO profile_info (user_id, certificate)
+    VALUES (?, ?)
+    ON DUPLICATE KEY UPDATE certificate = VALUES(certificate)
+  `;
+
+  db.query(query, [user_id, JSON.stringify(certificate)], (err, result) => {
+    if (err) {
+      console.error('Error saving certificate info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    res.status(200).json({ message: 'Certificate info saved successfully', success: true });
+  });
+});
+
+// GET Project Info
+router.get('/get-projects/:user_id', (req, res) => {
+  const userId = req.params.user_id;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'user_id is required' });
+  }
+
+  const query = `SELECT projects FROM profile_info WHERE user_id = ?`;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching projects info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No project info found', projects: [] });
+    }
+
+    res.status(200).json({
+      message: 'Project info retrieved successfully',
+      projects: results[0].projects ? JSON.parse(results[0].projects) : []
+    });
+  });
+});
+
+// POST Project Info
+router.post('/save-projects', (req, res) => {
+  const { user_id, projects } = req.body;
+
+  if (!user_id || !projects) {
+    return res.status(400).json({ message: 'user_id and projects are required' });
+  }
+
+  const query = `
+    INSERT INTO profile_info (user_id, projects)
+    VALUES (?, ?)
+    ON DUPLICATE KEY UPDATE projects = VALUES(projects)
+  `;
+
+  db.query(query, [user_id, JSON.stringify(projects)], (err, result) => {
+    if (err) {
+      console.error('Error saving projects info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    res.status(200).json({ message: 'Projects info saved successfully', success: true });
+  });
+});
 
 
 module.exports = router;

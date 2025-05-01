@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { api } from "@/utils/apiProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const CertificatePopupPage = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -6,11 +11,33 @@ const CertificatePopupPage = () => {
     title: "",
     organization: "",
     issuedDate: "",
-    expiryDate: "",
     linked: false,
     skills: "",
     description: "",
   });
+  const [savedCertificate, setSavedCertificate] = useState(null);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const user_id = user?.user_id;
+
+  useEffect(() => {
+    if (!user_id) return;
+    fetchCertificate();
+  }, []);
+
+  const fetchCertificate = async () => {
+    try {
+      const res = await axios.get(`${api}/api/profile/get-certificate/${user_id}`);
+      if (res.data.certificate) {
+        const parsed = JSON.parse(res.data.certificate); // Parse it here
+        setSavedCertificate(parsed);
+        console.log(parsed);
+      }
+    } catch (err) {
+      console.error("Error fetching certificate:", err);
+    }
+  };
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -20,39 +47,77 @@ const CertificatePopupPage = () => {
     }));
   };
 
+  const handleSave = async () => {
+    try {
+      const res = await axios.post(`${api}/api/profile/save-certificate`, {
+        user_id,
+        certificate,
+      });
+
+      if (res.data.success) {
+        toast.success("Certificate saved successfully");
+        setSavedCertificate(certificate);
+        setShowPopup(false);
+      } else {
+        toast.error("Failed to save certificate");
+      }
+    } catch (err) {
+      toast.error("Error saving certificate");
+      console.error(err);
+    }
+  };
+
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("overlay")) {
       setShowPopup(false);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Certificate data:", certificate);
-    setShowPopup(false);
-  };
-
   useEffect(() => {
     document.body.style.overflow = showPopup ? "hidden" : "auto";
-    return () => (document.body.style.overflow = "auto");
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [showPopup]);
+
+  const openEditPopup = () => {
+    if (savedCertificate) setCertificate(savedCertificate);
+    setShowPopup(true);
+  };
 
   return (
     <div style={{ backgroundColor: "#fff" }}>
-      {/* Section */}
       <div className="rounded p-3 mb-12">
         <div className="d-flex justify-between items-start">
           <div className="flex flex-col">
             <h5 className="text-20 fw-600 mb-12">Certificates</h5>
-            <p className="text-16 text-light-1 mb-10">
-              Highlight your professional certifications and achievements to stand out from the crowd!
-            </p>
-            <span
-              className="text-blue-1 cursor-pointer"
-              onClick={() => setShowPopup(true)}
-            >
-              Add Certificate
-            </span>
+            {savedCertificate ? (
+              <>
+                <p className="text-16 text-light-1 mb-10 whitespace-pre-line">
+                  <strong>{savedCertificate.title}</strong> by{" "}
+                  <strong>{savedCertificate.organization}</strong>
+                  <br />
+                  {savedCertificate.issuedDate}{" "}
+                  <br />
+                  Skills: {savedCertificate.skills}
+                  <br />
+                  {savedCertificate.description}
+                </p>
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  onClick={openEditPopup}
+                  className="text-blue-500 cursor-pointer hover:opacity-80"
+                  size="lg"
+                />
+              </>
+            ) : (
+              <span
+                className="text-blue-1 cursor-pointer"
+                onClick={() => setShowPopup(true)}
+              >
+                Add Certificate
+              </span>
+            )}
           </div>
           <div>
             <img
@@ -64,16 +129,9 @@ const CertificatePopupPage = () => {
         </div>
       </div>
 
-      {/* Popup */}
       {showPopup && (
-        <div
-          className="popup-main overlay"
-          onClick={handleOverlayClick}
-        >
-          <form
-            onSubmit={handleSubmit}
-            className="popup-second"
-          >
+        <div className="popup-main overlay" onClick={handleOverlayClick}>
+          <form onSubmit={(e) => e.preventDefault()} className="popup-second">
             <h3 className="text-lg font-semibold mb-2">
               Certificates <span style={{ color: "red" }}>*</span>
             </h3>
@@ -142,22 +200,11 @@ const CertificatePopupPage = () => {
               </div>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "1.5rem",
-              }}
-            >
-              <button
-                onClick={() => setShowPopup(false)}
-                className="cancel-button"
-              >
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5rem" }}>
+              <button onClick={() => setShowPopup(false)} className="cancel-button">
                 Cancel
               </button>
-              <button
-                className="save-button"
-              >
+              <button onClick={handleSave} className="save-button">
                 Save
               </button>
             </div>
