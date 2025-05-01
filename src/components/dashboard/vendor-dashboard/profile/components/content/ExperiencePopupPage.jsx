@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { api } from "@/utils/apiProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const ExperiencePopupPage = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -13,6 +18,26 @@ const ExperiencePopupPage = () => {
     skills: "",
     description: "",
   });
+  const [savedExperience, setSavedExperience] = useState(null);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const user_id = user?.user_id;
+
+  useEffect(() => {
+    if (!user_id) return;
+    fetchExperience();
+  }, []);
+
+  const fetchExperience = async () => {
+    try {
+      const res = await axios.get(`${api}/api/profile/get-experience/${user_id}`);
+      if (res.data.experience) {
+        setSavedExperience(res.data.experience);
+      }
+    } catch (err) {
+      console.error("Error fetching experience:", err);
+    }
+  };
 
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("overlay")) {
@@ -31,18 +56,65 @@ const ExperiencePopupPage = () => {
     setExperience({ ...experience, [e.target.name]: e.target.value });
   };
 
+  const handleSave = async () => {
+    try {
+      const res = await axios.post(`${api}/api/profile/save-experience`, {
+        user_id,
+        experience, // pass as a single object, or [experience] if your backend expects an array
+      });
+  
+      if (res.data.success) {
+        toast.success("Experience saved successfully");
+        setSavedExperience(experience);
+        setShowPopup(false);
+      } else {
+        toast.error("Failed to save experience");
+      }
+    } catch (err) {
+      toast.error("Error saving experience");
+      console.error(err);
+    }
+  };
+  
+
+  const openEditPopup = () => {
+    if (savedExperience) setExperience(savedExperience);
+    setShowPopup(true);
+  };
+
   return (
     <div style={{ backgroundColor: "#fff" }}>
       <div className="rounded p-3 mb-12" style={{ padding: "1rem", marginTop: "0.7rem" }}>
         <div className="d-flex justify-between items-start">
           <div className="flex flex-col">
             <h5 className="text-20 fw-600 mb-15">Work Experience</h5>
-            <p className="text-16 text-light-1 mb-10">
-              Narrate your professional journey to new career heights!
-            </p>
-            <Link to="#" className="text-blue-1" onClick={() => setShowPopup(true)}>
-              Add Work Experience
-            </Link>
+            {savedExperience ? (
+              <>
+                <p className="text-16 text-light-1 mb-10 whitespace-pre-line">
+                  <strong>{savedExperience.designation}</strong> at <strong>{savedExperience.organisation}</strong>
+                  <br />
+                  {savedExperience.startDate} to {savedExperience.endDate}
+                  <br />
+                  {savedExperience.location} | {savedExperience.employmentType}
+                  <br />
+                  Skills: {savedExperience.skills}
+                  <br />
+                  {savedExperience.description}
+                </p>
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  onClick={openEditPopup}
+                  className="text-blue-500 cursor-pointer hover:opacity-80"
+                  size="lg"
+                />
+              </>
+            ) : (
+              <Link to="#" 
+              style={{ color: "#3B82F6", cursor: "pointer", textDecoration: "underline" }}
+                onClick={() => setShowPopup(true)}>
+                Add Work Experience
+              </Link>
+            )}
           </div>
           <div>
             <img
@@ -55,42 +127,28 @@ const ExperiencePopupPage = () => {
       </div>
 
       {showPopup && (
-        <div
-          className="popup-main overlay"
-          onClick={handleOverlayClick}
-        >
-          <div
-            className="popup-second"
-          >
-            <h3 style={{ fontSize: "1.125rem", fontWeight: 600, marginBottom: "1.5rem" }}>
-              Work Experience
-            </h3>
-
-            {/* Input Fields */}
+        <div className="popup-main overlay" onClick={handleOverlayClick}>
+          <div className="popup-second">
+            <h3 style={{ fontSize: "1.125rem", fontWeight: 600, marginBottom: "1.5rem" }}>Work Experience</h3>
             <div className="grid grid-cols-1 gap-4">
-              <div>
-                <label>Designation *</label>
-                <input
-                    type="text"
-                    name="designation"
-                    value={experience.designation}
+              {[
+                { label: "Designation *", name: "designation", type: "text", placeholder: "Select Designation" },
+                { label: "Organisation *", name: "organisation", type: "text", placeholder: "Select Organisation" },
+                { label: "Location *", name: "location", type: "text", placeholder: "Select Location" },
+                { label: "Skills", name: "skills", type: "text", placeholder: "Add Skills" },
+              ].map(({ label, name, type, placeholder }) => (
+                <div key={name}>
+                  <label>{label}</label>
+                  <input
+                    type={type}
+                    name={name}
+                    value={experience[name]}
                     onChange={handleChange}
-                    placeholder="Select Designation"
+                    placeholder={placeholder}
                     className="custom-input-style"
-                    />
-              </div>
-
-              <div>
-                <label>Organisation *</label>
-                <input
-                  type="text"
-                  name="organisation"
-                  value={experience.organisation}
-                  onChange={handleChange}
-                  placeholder="Select Organisation"
-                  className="custom-input-style"
-                />
-              </div>
+                  />
+                </div>
+              ))}
 
               <div>
                 <label>Employment Type *</label>
@@ -116,10 +174,9 @@ const ExperiencePopupPage = () => {
                     name="startDate"
                     value={experience.startDate}
                     onChange={handleChange}
-                    className="!important custom-input-style"
+                    className="custom-input-style"
                   />
                 </div>
-
                 <div>
                   <label>End Date *</label>
                   <input
@@ -130,30 +187,6 @@ const ExperiencePopupPage = () => {
                     className="custom-input-style"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label>Location *</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={experience.location}
-                  onChange={handleChange}
-                  placeholder="Select Location"
-                  className="custom-input-style"
-                />
-              </div>
-
-              <div>
-                <label>Skills</label>
-                <input
-                  type="text"
-                  name="skills"
-                  value={experience.skills}
-                  onChange={handleChange}
-                  placeholder="Add Skills"
-                  className="custom-input-style"
-                />
               </div>
 
               <div>
@@ -168,26 +201,9 @@ const ExperiencePopupPage = () => {
                 />
               </div>
             </div>
-
-            {/* Buttons */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "1.5rem",
-              }}
-            >
-              <button
-                onClick={() => setShowPopup(false)}
-                className="cancel-button"
-              >
-                Cancel
-              </button>
-              <button
-                className="save-button"
-              >
-                Save
-              </button>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5rem" }}>
+              <button onClick={() => setShowPopup(false)} className="cancel-button">Cancel</button>
+              <button onClick={handleSave} className="save-button">Save</button>
             </div>
           </div>
         </div>

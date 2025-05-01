@@ -162,6 +162,102 @@ router.post('/save-skills', (req, res) => {
   });
 });
 
+// GET Experience Info
+router.get('/get-experience/:user_id', (req, res) => {
+  const userId = req.params.user_id;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'user_id is required' });
+  }
+
+  const query = `SELECT experience FROM profile_info WHERE user_id = ?`;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching experience info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No experience info found', experience: [] });
+    }
+
+    res.status(200).json({ message: 'Experience info retrieved successfully', experience: results[0].experience });
+  });
+});
+
+// POST Experience Info
+router.post('/save-experience', (req, res) => {
+  const { user_id, experience } = req.body;
+
+  if (!user_id || !experience) {
+    return res.status(400).json({ message: 'user_id and experience are required' });
+  }
+
+  const query = `
+    INSERT INTO profile_info (user_id, experience)
+    VALUES (?, ?)
+    ON DUPLICATE KEY UPDATE experience = VALUES(experience)
+  `;
+
+  db.query(query, [user_id, JSON.stringify(experience)], (err, result) => {
+    if (err) {
+      console.error('Error saving experience info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    res.status(200).json({ message: 'Experience info saved successfully', success: true });
+  });
+});
+
+// GET Education Info
+router.get('/get-education/:user_id', (req, res) => {
+  const userId = req.params.user_id;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'user_id is required' });
+  }
+
+  const query = `SELECT education FROM profile_info WHERE user_id = ?`;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching education info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No education info found', education: [] });
+    }
+
+    res.status(200).json({ message: 'Education info retrieved successfully', education: results[0].education });
+  });
+});
+
+// POST Education Info
+router.post('/save-education', (req, res) => {
+  const { user_id, education } = req.body;
+
+  if (!user_id || !education) {
+    return res.status(400).json({ message: 'user_id and education are required' });
+  }
+
+  const query = `
+    INSERT INTO profile_info (user_id, education)
+    VALUES (?, ?)
+    ON DUPLICATE KEY UPDATE education = VALUES(education)
+  `;
+
+  db.query(query, [user_id, JSON.stringify(education)], (err, result) => {
+    if (err) {
+      console.error('Error saving education info:', err);
+      return res.status(500).json({ message: 'Database error', error: err.message });
+    }
+
+    res.status(200).json({ message: 'Education info saved successfully', success: true });
+  });
+});
+
 
 
 module.exports = router;

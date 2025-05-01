@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { api } from "@/utils/apiProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const EducationPopupPage = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -17,19 +22,24 @@ const EducationPopupPage = () => {
     skills: "",
     description: "",
   });
+  const [savedEducation, setSavedEducation] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setEducation((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  const user = JSON.parse(localStorage.getItem("user"));
+  const user_id = user?.user_id;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Education data:", education);
-    setShowPopup(false);
+  useEffect(() => {
+    if (user_id) fetchEducation();
+  }, []);
+
+  const fetchEducation = async () => {
+    try {
+      const res = await axios.get(`${api}/api/profile/get-education/${user_id}`);
+      if (res.data.education) {
+        setSavedEducation(res.data.education);
+      }
+    } catch (err) {
+      console.error("Error fetching education:", err);
+    }
   };
 
   const handleOverlayClick = (e) => {
@@ -45,24 +55,70 @@ const EducationPopupPage = () => {
     };
   }, [showPopup]);
 
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEducation((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const res = await axios.post(`${api}/api/profile/save-education`, {
+        user_id,
+        education,
+      });
+      if (res.data.success) {
+        toast.success("Education saved successfully");
+        setSavedEducation(education);
+        setShowPopup(false);
+      } else {
+        toast.error("Failed to save education");
+      }
+    } catch (err) {
+      toast.error("Error saving education");
+      console.error(err);
+    }
+  };
+
+  const openEditPopup = () => {
+    if (savedEducation) setEducation(savedEducation);
+    setShowPopup(true);
+  };
+
   return (
     <div style={{ backgroundColor: "#fff" }}>
-      {/* Section trigger */}
       <div style={{ borderRadius: "0.375rem", padding: "1rem", marginTop: "0.7rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <h5 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "0.5rem" }}>
               Education
             </h5>
-            <p style={{ fontSize: "1rem", color: "#4B5563", marginBottom: "0.5rem" }}>
-              Add your educational background here
-            </p>
-            <span
-              style={{ color: "#3B82F6", textDecoration: "underline", cursor: "pointer" }}
-              onClick={() => setShowPopup(true)}
-            >
-              Add Education
-            </span>
+            {savedEducation ? (
+              <>
+                <p style={{ fontSize: "1rem", color: "#4B5563", whiteSpace: "pre-line", marginBottom: "0.5rem" }}>
+                  <strong>{savedEducation.course}</strong> in <strong>{savedEducation.specialization}</strong> at <strong>{savedEducation.college}</strong><br />
+                  {savedEducation.startYear} to {savedEducation.endYear}<br />
+                  {savedEducation.qualification} | {savedEducation.courseType}<br />
+                  CGPA: {savedEducation.cgpa} | Skills: {savedEducation.skills}<br />
+                  {savedEducation.description}
+                </p>
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  onClick={openEditPopup}
+                  className="text-blue-500 cursor-pointer hover:opacity-80"
+                  size="lg"
+                />
+              </>
+            ) : (
+              <span
+                style={{ color: "#3B82F6", textDecoration: "underline", cursor: "pointer" }}
+                onClick={() => setShowPopup(true)}
+              >
+                Add Education
+              </span>
+            )}
           </div>
           <img
             src="/img/profile/education.webp"
@@ -72,16 +128,9 @@ const EducationPopupPage = () => {
         </div>
       </div>
 
-      {/* Popup */}
       {showPopup && (
-        <div
-          className="popup-main overlay"
-          onClick={handleOverlayClick}
-        >
-          <form
-            onSubmit={handleSubmit}
-            className="popup-second"
-          >
+        <div className="popup-main overlay" onClick={handleOverlayClick}>
+          <div className="popup-second">
             <h3 style={{ fontSize: "1.125rem", fontWeight: 600, marginBottom: "1rem" }}>
               Add Education <span style={{ color: "red" }}>*</span>
             </h3>
@@ -135,21 +184,14 @@ const EducationPopupPage = () => {
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5rem" }}>
-              <button
-                type="button"
-                onClick={() => setShowPopup(false)}
-                className="cancel-button"
-              >
+              <button onClick={() => setShowPopup(false)} className="cancel-button">
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="save-button"
-              >
+              <button onClick={handleSave} className="save-button">
                 Save
               </button>
             </div>
-          </form>
+          </div>
         </div>
       )}
     </div>
