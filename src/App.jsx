@@ -62,6 +62,8 @@ import VendorBooking from "./pages/dashboard/vendor-dashboard/booking";
 import BVVendorHotel from "./pages/dashboard/vendor-dashboard/hotels";
 import BDVendorRecovery from "./pages/dashboard/vendor-dashboard/recovery";
 import VendorDashboard from "./pages/dashboard/vendor-dashboard/dashboard";
+import MentorDashboard from "./pages/dashboard/mentor-dashboard/dashboard";
+import MentorProfile from "./pages/dashboard/mentor-dashboard/profile";
 import VendorProfile from "./pages/dashboard/vendor-dashboard/profile";
 import HotelListPage1 from "./pages/hotel/hotel-list-v1";
 import HotelListPage2 from "./pages/hotel/hotel-list-v2";
@@ -96,11 +98,17 @@ import Contact from "./pages/others/contact";
 import Destinations from "./pages/others/destinations";
 import Pricing from "./pages/pricing";
 import VendorMarketingOverview from "./pages/dashboard/vendor-dashboard/overview";
+import MentorMarketingOverview from "./pages/dashboard/mentor-dashboard/overview";
 import VendorMarketingGoogle from "./pages/dashboard/vendor-dashboard/marketing-google";
+import MentorMarketingGoogle from "./pages/dashboard/mentor-dashboard/marketing-google";
 import VendorMarketingFacebook from "./pages/dashboard/vendor-dashboard/marketing-facebook";
+import MentorMarketingFacebook from "./pages/dashboard/mentor-dashboard/marketing-facebook";
 import VendorFacebook from "./pages/dashboard/vendor-dashboard/facebook";
+import MentorFacebook from "./pages/dashboard/mentor-dashboard/facebook";
 import VendorInstagram from "./pages/dashboard/vendor-dashboard/instagram";
+import MentorInstagram from "./pages/dashboard/mentor-dashboard/instagram";
 import VendorWebpage from "./pages/dashboard/vendor-dashboard/webpage";
+import MentorWebpage from "./pages/dashboard/mentor-dashboard/webpage";
 
 function App() {
   useEffect(() => {
@@ -204,6 +212,31 @@ function App() {
                 <Route path="webpage" element={<VendorWebpage />} />
                 <Route path="instagram" element={<VendorInstagram />} />
                 <Route path="facebook" element={<VendorFacebook />} />
+                {/* single tabs */}
+
+                <Route path="add-hotel" element={<VendorAddHotel />} />
+                <Route path="booking" element={<VendorBooking />} />
+                <Route path="hotels" element={<BVVendorHotel />} />
+                <Route path="recovery" element={<BDVendorRecovery />} />
+              </Route>
+
+              <Route path="mentor-dashboard">
+                <Route path="dashboard" element={<MentorDashboard />} />
+                <Route path="profile" element={<MentorProfile />} />
+
+                {/* marketing sub section starts*/}
+                <Route path="overview" element={<MentorMarketingOverview />} />
+                <Route path="google_ads" element={<MentorMarketingGoogle />} />
+                <Route
+                  path="facebook_ads"
+                  element={<VendorMarketingFacebook />}
+                />
+                {/* marketing sub section ends*/}
+
+                {/* single tabs */}
+                <Route path="webpage" element={<MentorWebpage />} />
+                <Route path="instagram" element={<MentorInstagram />} />
+                <Route path="facebook" element={<MentorFacebook />} />
                 {/* single tabs */}
 
                 <Route path="add-hotel" element={<VendorAddHotel />} />

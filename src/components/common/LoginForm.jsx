@@ -29,19 +29,18 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         setFormData({ email: "", password: "", role: "user" });
-      
+
         const userData = response.data.userData;
         const userId = userData.user_id;
         const userRole = userData.role;
-      
+
         localStorage.setItem("user", JSON.stringify(userData));
-      
         localStorage.setItem(`${userRole}Id`, userId);
         localStorage.setItem("role", userRole);
         sessionStorage.setItem("user", userRole);
-      
+
         toast.success("Login successful!");
-      
+
         setTimeout(() => {
           if (state?.type && state?.id) {
             navigate(`/${state.type}/${state.id}`);
@@ -50,13 +49,14 @@ const LoginForm = () => {
               navigate("/admin-dashboard/dashboard");
             } else if (userRole === "user") {
               navigate("/vendor-dashboard/dashboard");
+            } else if (userRole === "mentor") {
+              navigate("/mentor-dashboard/dashboard");
             } else {
               navigate("/");
             }
           }
-        }, 1000);        
-      }
-       else {
+        }, 1000);
+      } else {
         toast.error("Something went wrong.");
       }
     } catch (error) {
@@ -81,7 +81,7 @@ const LoginForm = () => {
 
         {/* Role dropdown */}
         <div className="col-12">
-        <label >Select Role:</label>
+          <label>Select Role:</label>
           <div className="form-input">
             <select
               name="role"
@@ -92,9 +92,11 @@ const LoginForm = () => {
             >
               <option value="user">User</option>
               <option value="admin">Admin</option>
+              <option value="mentor">Mentor</option>
             </select>
           </div>
         </div>
+
         <div className="col-12">
           <div className="form-input">
             <input

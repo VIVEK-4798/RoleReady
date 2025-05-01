@@ -11,23 +11,26 @@ const lodash = require('lodash');
 
 // 1. Create a new user
 app.post('/create-users', async (req, res) => {
-    const { name, mobile, email, role, password, image } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+  const { name, mobile, email, role, password, image } = req.body;
+  console.log(req.body);
   
-    const query = 'INSERT INTO user (name, mobile, email, role, password, image) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(query, [name, mobile, email, role, hashedPassword, image || null], async (err, result) => {
-      if (err) {
-        // Check if error is due to duplicate entry 
-        if (err.code === 'ER_DUP_ENTRY') {
-          return res.status(409).json({ error: 'Email or mobile number already exists' });
-        }
-        return res.status(500).json({ error: 'Error creating user' });
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const query = 'INSERT INTO user (name, mobile, email, role, password, image) VALUES (?, ?, ?, ?, ?, ?)';
+  db.query(query, [name, mobile, email, role, hashedPassword, image || null], async (err, result) => {
+    if (err) {
+      console.error(err); // Log error for debugging
+      // Check if error is due to duplicate entry 
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({ error: 'Email or mobile number already exists' });
       }
-      // TODO : need to make a entry in service table in role is service
-      await sendEmail(getOptionMailForUserOnboarding(name,email));
-      res.status(201).json({ result : 1, message: 'User created successfully' });
-    });
+      return res.status(500).json({ error: err.message || 'Error creating user' });
+    }
+    await sendEmail(getOptionMailForUserOnboarding(name, email));
+    res.status(201).json({ result: 1, message: 'User created successfully' });
+  });
 });
+
 
 // 2. Read all users
 
