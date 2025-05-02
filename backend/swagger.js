@@ -6,9 +6,9 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Your Project API",
+      title: "Startups24x7 API",
       version: "1.0.0",
-      description: "API documentation for your backend",
+      description: "API documentation for Startups24x7 backend",
     },
     servers: [
       {
@@ -16,7 +16,7 @@ const options = {
       },
     ],
   },
-  apis: ["./routes/*.js"], // path to your route files
+  apis: ["./service/*.js"], // path to your route files
 };
 
 const swaggerSpec = swaggerJsDoc(options);

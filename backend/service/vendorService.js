@@ -58,6 +58,79 @@ app.post('/add-vendor', (req, res) => {
 	});
 });
 
+/**
+ * @swagger
+ * /api/vendor/get-vendors:
+ *   get:
+ *     summary: Get a list of vendors (with optional pagination, search, and user-specific filtering)
+ *     tags: [Vendors]
+ *     parameters:
+ *       - in: header
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: User ID to filter vendors by specific user
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         required: false
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         required: false
+ *         description: Number of results per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Keyword to search vendors by name, user name, or email
+ *     responses:
+ *       200:
+ *         description: List of vendors fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     description: Vendor data
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 1
+ *                     limit:
+ *                       type: integer
+ *                       example: 10
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 5
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Internal server error
+ */
+
 // READ: Get all vendors
 app.get('/get-vendors', (req, res) => {
     const { id } = req.headers; // Get user ID from headers
