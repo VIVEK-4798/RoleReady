@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Get About info
+// Get all info
 router.get('/get-profile-info/:user_id', (req, res) => {
   const userId = req.params.user_id;
   if (!userId) return res.status(400).json({ message: 'user_id is required' });
@@ -51,12 +51,25 @@ router.get('/get-profile-info/:user_id', (req, res) => {
 // GET About info
 router.get('/get-about/:user_id', (req, res) => {
   const userId = req.params.user_id;
+  const pathParts = req.originalUrl.split('/');
+  
+  const role = pathParts.includes('mentor-dashboard')
+    ? 'mentor'
+    : pathParts.includes('admin-dashboard')
+    ? 'admin'
+    : 'user';
 
   if (!userId) {
     return res.status(400).json({ message: 'user_id is required' });
   }
 
-  const query = `SELECT about_text FROM profile_info WHERE user_id = ?`;
+  let tableName;
+  if (role === 'user') tableName = 'profile_info';
+  else if (role === 'mentor') tableName = 'mentor_profile_info';
+  else if (role === 'admin') tableName = 'admin_profile_info';
+  else return res.status(400).json({ message: 'Invalid role' });
+
+  const query = `SELECT about_text FROM ${tableName} WHERE user_id = ?`;
 
   db.query(query, [userId], (err, results) => {
     if (err) {
@@ -72,29 +85,50 @@ router.get('/get-about/:user_id', (req, res) => {
   });
 });
 
-// POST About info
-router.post('/save-about', (req, res) => {
-  const { user_id, about_text } = req.body;
 
-  if (!user_id || !about_text) {
+// POST About info
+router.post('/post-about/:user_id', (req, res) => {
+  const userId = req.params.user_id;
+  const { about_text } = req.body;
+  const pathParts = req.originalUrl.split('/');
+
+  const role = pathParts.includes('mentor-dashboard')
+    ? 'mentor'
+    : pathParts.includes('admin-dashboard')
+    ? 'admin'
+    : 'user';
+
+  if (!userId || !about_text) {
     return res.status(400).json({ message: 'user_id and about_text are required' });
   }
 
-  const query = `
-    INSERT INTO profile_info (user_id, about_text)
-    VALUES (?, ?)
-    ON DUPLICATE KEY UPDATE about_text = VALUES(about_text)
-  `;
+  let tableName;
+  if (role === 'user') tableName = 'profile_info';
+  else if (role === 'mentor') tableName = 'mentor_profile_info';
+  else if (role === 'admin') tableName = 'admin_profile_info';
+  else return res.status(400).json({ message: 'Invalid role' });
 
-  db.query(query, [user_id, about_text], (err, result) => {
-    if (err) {
-      console.error('Error saving About info:', err);
-      return res.status(500).json({ message: 'Database error', error: err.message });
+  const checkQuery = `SELECT * FROM ${tableName} WHERE user_id = ?`;
+  const updateQuery = `UPDATE ${tableName} SET about_text = ? WHERE user_id = ?`;
+  const insertQuery = `INSERT INTO ${tableName} (user_id, about_text) VALUES (?, ?)`;
+
+  db.query(checkQuery, [userId], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err.message });
+
+    if (results.length > 0) {
+      db.query(updateQuery, [about_text, userId], (err) => {
+        if (err) return res.status(500).json({ message: 'Update failed', error: err.message });
+        return res.status(200).json({ message: 'About info updated successfully' });
+      });
+    } else {
+      db.query(insertQuery, [userId, about_text], (err) => {
+        if (err) return res.status(500).json({ message: 'Insert failed', error: err.message });
+        return res.status(201).json({ message: 'About info inserted successfully' });
+      });
     }
-
-    res.status(200).json({ message: 'Profile about info saved successfully', success: true });
   });
 });
+
 
 // GET Resume info
 router.get('/get-resume/:user_id', (req, res) => {
