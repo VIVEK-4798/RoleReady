@@ -39,8 +39,9 @@ const LoginForm = () => {
         localStorage.setItem("role", userRole);
         
         sessionStorage.setItem("user", userRole);
-        console.log("userRole", userRole);
-        
+        await axios.post(`${api}/api/user-activity/login-streak`, {
+          userId: userId
+        });        
 
         toast.success("Login successful!");
 
