@@ -33,6 +33,7 @@ const footerService = require('./service/footerService.js');
 const packagesService = require('./service/packagesService.js');
 const emailService = require('./service/emailService.js');
 const profileService = require('./service/profileService.js');
+const userActivityService = require('./service/userActivityService.js');
 
 // routes
 app.use('/api/user', userService);
@@ -51,6 +52,7 @@ app.use('/api/package', packagesService);
 app.use('/api/email', emailService);
 app.use("", googleAuth);
 app.use('/api/profile', profileService);
+app.use('/api/user-activity', userActivityService);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 

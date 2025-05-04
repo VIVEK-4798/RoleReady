@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
+import axios from "axios";
 import CalHeatmap from "cal-heatmap";
 import "cal-heatmap/cal-heatmap.css";
 import Tooltip from "cal-heatmap/plugins/Tooltip";
+import { api } from "@/utils/apiProvider";
 
 const StreaksSection = () => {
   const calRef = useRef(null); 
@@ -12,8 +14,15 @@ const StreaksSection = () => {
       if (!user) return;
   
       try {
+        if (calRef.current) {
+          await calRef.current.destroy(); // properly wait for cleanup
+          calRef.current = null;
+          const container = document.getElementById("cal-heatmap");
+          if (container) container.innerHTML = ""; // clear the div completely
+        }
+  
         const response = await axios.get(`${api}/api/user-activity/login-streak/${user.user_id}`);
-        const streakData = response.data; // should be [{ date: '2025-04-01', activity_count: 4 }, ...]
+        const streakData = response.data;
   
         const transformedData = streakData.map(item => ({
           date: item.date,
@@ -54,24 +63,37 @@ const StreaksSection = () => {
       }
     };
   
-    if (!calRef.current) {
-      fetchStreakData();
-    }
+    fetchStreakData();
   
     return () => {
       if (calRef.current) {
-        calRef.current.destroy().then(() => (calRef.current = null));
+        calRef.current.destroy().then(() => {
+          calRef.current = null;
+          const container = document.getElementById("cal-heatmap");
+          if (container) container.innerHTML = "";
+        });
       }
     };
-  }, []);
+  }, []);  
   
 
   return (
     <div className="mb-8">
-      <h4>Contributions in the past year</h4>
-      <div id="cal-heatmap"></div>
+      <h4 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "10px" }}>
+        Contributions in the past year
+      </h4>
+      <div
+        id="cal-heatmap"
+        style={{
+          width: "100%",
+          maxWidth: "100%",
+          overflowX: "auto",
+          paddingBottom: "10px",
+        }}
+      ></div>
     </div>
   );
+  
 };
 
 export default StreaksSection;
