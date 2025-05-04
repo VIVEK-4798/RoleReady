@@ -129,7 +129,6 @@ router.post('/save-about', (req, res) => {
 });
 
 
-
 // GET Resume info
 router.get('/get-resume/:user_id', (req, res) => {
   const userId = req.params.user_id;
