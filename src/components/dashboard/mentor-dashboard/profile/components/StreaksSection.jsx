@@ -6,33 +6,27 @@ import Tooltip from "cal-heatmap/plugins/Tooltip";
 import { api } from "@/utils/apiProvider";
 
 const StreaksSection = () => {
-  const calRef = useRef(null); 
+  const calRef = useRef(null);
+  const isPainted = useRef(false); // new flag to prevent double paint
 
   useEffect(() => {
     const fetchStreakData = async () => {
       const user = JSON.parse(localStorage.getItem("user"));
-      if (!user) return;
-  
+      if (!user || isPainted.current) return;
+
       try {
-        if (calRef.current) {
-          await calRef.current.destroy(); // properly wait for cleanup
-          calRef.current = null;
-          const container = document.getElementById("cal-heatmap");
-          if (container) container.innerHTML = ""; // clear the div completely
-        }
-  
         const response = await axios.get(`${api}/api/user-activity/login-streak/${user.user_id}`);
         const streakData = response.data;
-  
+
         const transformedData = streakData.map(item => ({
           date: item.date,
           value: item.activity_count,
         }));
-  
+
         const cal = new CalHeatmap();
         calRef.current = cal;
-  
-        cal.paint(
+
+        await cal.paint(
           {
             itemSelector: "#cal-heatmap",
             domain: { type: "month", label: { position: "top" }, gutter: 10 },
@@ -58,14 +52,17 @@ const StreaksSection = () => {
             ],
           ]
         );
+
+        isPainted.current = true; // prevent future paints
       } catch (error) {
         console.error("Failed to fetch streak data", error);
       }
     };
-  
+
     fetchStreakData();
-  
+
     return () => {
+      isPainted.current = false; // reset flag
       if (calRef.current) {
         calRef.current.destroy().then(() => {
           calRef.current = null;
@@ -74,8 +71,7 @@ const StreaksSection = () => {
         });
       }
     };
-  }, []);  
-  
+  }, []);
 
   return (
     <div className="mb-8">
@@ -93,7 +89,6 @@ const StreaksSection = () => {
       ></div>
     </div>
   );
-  
 };
 
 export default StreaksSection;

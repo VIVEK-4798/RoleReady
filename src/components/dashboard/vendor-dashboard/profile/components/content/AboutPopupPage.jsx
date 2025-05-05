@@ -24,7 +24,7 @@ const AboutPopupPage = () => {
 
   const fetchAbout = async () => {
     try {
-      const res = await axios.get(`${api}/api/profile/get-about/${user_id}`);
+      const res = await axios.get(`${api}/api/profile/get-about/${user_id}?role=user`);
       if (res.data.about_text) {
         setSavedAboutText(res.data.about_text);
       }
@@ -53,7 +53,8 @@ const AboutPopupPage = () => {
     try {
       const response = await axios.post(`${api}/api/profile/save-about`, {
         user_id,
-        about_text: aboutText
+        about_text: aboutText,
+        role: 'user'
       });
 
       if (response.data.success) {

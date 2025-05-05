@@ -36,7 +36,6 @@ const ProfileHeader = () => {
         const res = await fetch(`${api}/api/profile/get-profile-info/${user?.user_id}`);
         const data = await res.json();
         setProfileInfo(data);
-        console.log(data);
         
       } catch (err) {
         console.error("Failed to fetch profile info:", err);

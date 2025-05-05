@@ -8,9 +8,7 @@ const NicheSection = () => {
   const [value, setValue] = useState('');
   const [saved, setSaved] = useState(false);
   const user = JSON.parse(localStorage.getItem('user'));
-  const userId = user?.user_id;
-  console.log(userId);
-  
+  const userId = user?.user_id;  
   
 
   useEffect(() => {
