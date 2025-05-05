@@ -97,7 +97,7 @@ const BasicInformation = ({
                 value={venueFormData?.venue_name}
                 onChange={handleChange}
               />
-              <label className="lh-1 text-16 text-light-1">Venue Name</label>
+              <label className="lh-1 text-16 text-light-1">Internship Name</label>
             </div>
           </div>
           <div className="col-12">
@@ -109,7 +109,7 @@ const BasicInformation = ({
                 value={venueFormData?.venue_address}
                 onChange={handleChange}
               />
-              <label className="lh-1 text-16 text-light-1">Venue Address</label>
+              <label className="lh-1 text-16 text-light-1">Internship Address</label>
             </div>
           </div>
           <div className="col-6">
@@ -280,7 +280,7 @@ const BasicInformation = ({
                 value={venueFormData?.website}
                 onChange={handleChange}
               />
-              <label className="lh-1 text-16 text-light-1">Website URL</label>
+              <label className="lh-1 text-16 text-light-1">Company Website URL</label>
             </div>
           </div>
 
@@ -294,7 +294,7 @@ const BasicInformation = ({
                 onChange={handleChange}
               />
               <label className="lh-1 text-16 text-light-1">
-                Google Maps Link
+                Company Google Maps Link
               </label>
             </div>
           </div>

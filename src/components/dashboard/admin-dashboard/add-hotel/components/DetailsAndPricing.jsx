@@ -64,10 +64,58 @@ const DetailsAndPricing = ({
               "bullet",
               "link",
             ]}
-            placeholder="Write overview your venue..."
+            placeholder="Write overview for your Internship..."
           />
         </div>
 
+        <div className="col-12">
+            <div className="form-input ">
+              <input
+                type="text"
+                required
+                name="special_label"
+                value={venueFormData?.special_label}
+                onChange={handleChange}
+              />
+              <label className="lh-1 text-16 text-light-1">Responsibilities of the Intern:</label>
+            </div>
+          </div>
+        <div className="col-12">
+            <div className="form-input ">
+              <input
+                type="text"
+                required
+                name="special_label"
+                value={venueFormData?.special_label}
+                onChange={handleChange}
+              />
+              <label className="lh-1 text-16 text-light-1">Requirements</label>
+            </div>
+          </div>
+        <div className="col-12">
+            <div className="form-input ">
+              <input
+                type="text"
+                required
+                name="special_label"
+                value={venueFormData?.special_label}
+                onChange={handleChange}
+              />
+              <label className="lh-1 text-16 text-light-1">Perks</label>
+            </div>
+          </div>
+        <div className="col-12">
+            <div className="form-input ">
+              <input
+                type="text"
+                required
+                name="special_label"
+                value={venueFormData?.special_label}
+                onChange={handleChange}
+              />
+              <label className="lh-1 text-16 text-light-1">Eligibility</label>
+            </div>
+          </div>
 
         {/* Categories Dropdown */}
         <div className="col-12">
@@ -120,6 +168,30 @@ const DetailsAndPricing = ({
             </div>
           </div>
         </div>
+        <div className="col-12">
+            <div className="form-input ">
+              <input
+                type="text"
+                required
+                name="special_label"
+                value={venueFormData?.special_label}
+                onChange={handleChange}
+              />
+              <label className="lh-1 text-16 text-light-1">Internship Type/Timing</label>
+            </div>
+          </div>
+        <div className="col-12">
+            <div className="form-input ">
+              <input
+                type="text"
+                required
+                name="special_label"
+                value={venueFormData?.special_label}
+                onChange={handleChange}
+              />
+              <label className="lh-1 text-16 text-light-1">Work Detail (Ex - 5 days)</label>
+            </div>
+          </div>
 
         {/* Remaining Form Elements */}
         <div className="col-6">
@@ -131,183 +203,24 @@ const DetailsAndPricing = ({
               value={venueFormData?.venue_rate}
               onChange={handleChange}
             />
-            <label className="lh-1 text-16 text-light-1">Venue Rate</label>
+            <label className="lh-1 text-16 text-light-1">Internship Stipend</label>
           </div>
         </div>
-
         <div className="col-6">
           <div className="form-input">
             <input
               type="number"
               required
-              name="veg_package_price"
-              value={venueFormData?.veg_package_price}
+              name="venue_rate"
+              value={venueFormData?.venue_rate}
               onChange={handleChange}
             />
-            <label className="lh-1 text-16 text-light-1">Veg Package Price</label>
+            <label className="lh-1 text-16 text-light-1">Internship Duration in months</label>
           </div>
         </div>
 
-        <div className="col-6">
-          <div className="form-input">
-            <input
-              type="number"
-              required
-              name="non_veg_package_price"
-              value={venueFormData?.non_veg_package_price}
-              onChange={handleChange}
-            />
-            <label className="lh-1 text-16 text-light-1">Non-Veg Package Price</label>
-          </div>
-        </div>
       </div>
       <div className="border-top-light mt-30 mb-30" />
-      <div className="mt-30">
-        <div className="fw-500 mb-20">Veg Package Details</div>
-        <div className="overflow-scroll scroll-bar-1">
-          <table className="table-5 -border-bottom col-12">
-            <thead className="bg-light-2">
-              <tr>
-                <th>Dish Name</th>
-                <th>Quantity</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {venueFormData.veg_package.map((dish)=>{
-                return (
-                  <tr>
-                    <td className="col-4">
-                      <div className="form-input ">
-                        <label style={{top:"10px"}} className="lh-1 text-16 text-light-1">
-                          {dish.dish_name}
-                        </label>
-                      </div>
-                    </td>
-                    <td className="col-4">
-                      <div className="form-input ">
-                        <label style={{top:"10px"}} className="lh-1 text-16 text-light-1">
-                          {dish.dish_quantity}
-                        </label>
-                      </div>
-                    </td>
-                    <td className="col-auto">
-                      <button className="flex-center bg-light-2 rounded-4 size-35" onClick={()=>{handleVegDishDelete(dish.id)}}>
-                        <i className="icon-trash-2 text-16 text-light-1" />
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <form>
-        <div className="d-flex justify-between">
-          <div className="col-4">
-            <div className="form-input">
-              <input 
-                type="text" 
-                required 
-                name="dish_name" 
-                value={vegDish?.dish_name} 
-                onChange={handleVegChange} 
-              />
-              <label className="lh-1 text-16 text-light-1">Dish Name</label>
-            </div>
-          </div>
-          <div className="col-4">
-            <div className="form-input">
-              <input 
-                type="text" 
-                required 
-                name="dish_quantity" 
-                value={vegDish?.dish_quantity} 
-                onChange={handleVegChange}   
-              />
-              <label className="lh-1 text-16 text-light-1">Quantity</label>
-            </div>
-          </div> 
-          <button onClick={handleSubmitVegDish} className="button col-3 -md -blue-1 bg-blue-1-05 text-blue-1 mt-20">
-            Add Item
-          </button>
-        </div>
-      </form>
-      <div className="border-top-light mt-30 mb-30" />
-      <div className="mt-30">
-        <div className="fw-500 mb-20">Nov Veg Package Details</div>
-        <div className="overflow-scroll scroll-bar-1">
-          <table className="table-5 -border-bottom col-12">
-            <thead className="bg-light-2">
-              <tr>
-                <th>Dish Name</th>
-                <th>Quantity</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {venueFormData.non_veg_package.map((dish)=>{
-                return (
-                  <tr>
-                    <td className="col-4">
-                      <div className="form-input ">
-                        <label style={{top:"10px"}} className="lh-1 text-16 text-light-1">
-                          {dish.dish_name}
-                        </label>
-                      </div>
-                    </td>
-                    <td className="col-4">
-                      <div className="form-input ">
-                        <label style={{top:"10px"}} className="lh-1 text-16 text-light-1">
-                          {dish.dish_quantity}
-                        </label>
-                      </div>
-                    </td>
-                    <td className="col-auto">
-                      <button className="flex-center bg-light-2 rounded-4 size-35" onClick={()=>{handleNonVegDishDelete(dish.id)}}>
-                        <i className="icon-trash-2 text-16 text-light-1" />
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <form>
-        <div className="d-flex justify-between">
-          <div className="col-4">
-            <div className="form-input">
-              <input 
-                type="text" 
-                required 
-                name="dish_name" 
-                value={nonVegDish?.dish_name} 
-                onChange={handleNonVegChange} 
-              />
-              <label className="lh-1 text-16 text-light-1">Dish Name</label>
-            </div>
-          </div>
-          <div className="col-4">
-            <div className="form-input">
-              <input 
-                type="text" 
-                required 
-                name="dish_quantity" 
-                value={nonVegDish?.dish_quantity} 
-                onChange={handleNonVegChange}   
-              />
-              <label className="lh-1 text-16 text-light-1">Quantity</label>
-            </div>
-          </div> 
-          <button onClick={handleSubmitNonVegDish} className="button col-3 -md -blue-1 bg-blue-1-05 text-blue-1 mt-20">
-            Add Item
-          </button>
-        </div>
-      </form>
-
     </div>
   );
 };

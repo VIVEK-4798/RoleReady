@@ -209,7 +209,7 @@ const Index = () => {
     {
       label: "Details & Pricing",
       labelNo: 2,
-      content: <DetailsAndPricing handleNonVegDishDelete={handleNonVegDishDelete} handleChange={handleChange} handleVegDishDelete={handleVegDishDelete} handleDropDownChange={handleDropDownChange} handleNonVegChange = {handleNonVegChange} handleSubmitNonVegDish={handleSubmitNonVegDish} vegDish={vegDish} nonVegDish={nonVegDish} setNonVegDish={setNonVegDish} handleVegChange = {handleVegChange} handleSubmitVegDish={handleSubmitVegDish} venueFormData={venueFormData} allCategories={allCategories} handleCategoryDropDownChange = {handleCategoryDropDownChange}/>,
+      content: <DetailsAndPricing handleNonVegDishDelete={handleNonVegDishDelete} handleChange={handleChange} handleVegDishDelete={handleVegDishDelete} handleDropDownChange={handleDropDownChange} handleNonVegChange = {handleNonVegChange} handleSubmitNonVegDish={handleSubmitNonVegDish} venueFormData={venueFormData} allCategories={allCategories} handleCategoryDropDownChange = {handleCategoryDropDownChange}/>,
     },
     {
       label: "Media & Resources",
