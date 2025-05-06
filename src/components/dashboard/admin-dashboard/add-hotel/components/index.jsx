@@ -7,7 +7,6 @@ import AdministrativeControl from "./AdministrativeControl";
 import axios from "axios";
 import { api } from "@/utils/apiProvider";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-// import { showAlert } from "@/utils/isTextMatched";
 
 const Index = () => {
   let params = useParams();
@@ -18,23 +17,27 @@ const Index = () => {
   const navigate = useNavigate();
 
   const [venueFormData, setVenueFormData] = useState({
-    venue_name: "",        // Venue name
-    venue_address: "",     // Venue address
-    state: "",             // State
-    pincode: "",           // Pincode
-    country: "",           // Country
-    venue_phone_no: "",    // Venue phone number
-    venue_email: "",       // Venue email
-    website: "",           // Website
-    venue_categories: [],  // Venue categories (will be an array for multiple selections)
-    venue_rate: "",        // Venue rate
-    venue_overview: "",    // Venue overview
-    venue_map_url: "",     // Venue map URL
-    venue_images: [],    // Venue images (Blob, default is null)
-    veg_package_price: "", // Veg package price
-    veg_package: [],       // Veg package
-    non_veg_package_price: "", // Non-veg package price
-    non_veg_package: [],   // Non-veg package
+    venue_name: "",        
+    venue_address: "",     
+    state: "",             
+    pincode: "",           
+    country: "",          
+    venue_phone_no: "",   
+    venue_email: "",       
+    website: "",           
+    venue_categories: [],  
+    duration_months: "",
+    stipend: "",
+    work_detail: "",
+    internship_type:"",
+    eligibility:"",
+    perks:"",
+    requirements:"",
+    responsibilities:"",
+    venue_rate: "",        
+    venue_overview: "",    
+    venue_map_url: "",     
+    venue_images: [],    
     city_name:"",
     region_name:"",
     is_enable : false
@@ -58,26 +61,30 @@ const Index = () => {
   useEffect(()=>{
     if (mode === "add") {
       setVenueFormData({
-        venue_name: "",      
-        venue_address: "",    
-        state: "",           
-        pincode: "",         
-        country: "",          
-        venue_phone_no: "",  
-        venue_email: "",      
-        website: "",         
-        venue_categories: [], 
+        venue_name: "",        
+        venue_address: "",     
+        state: "",             
+        pincode: "",          
+        country: "",           
+        venue_phone_no: "",    
+        venue_email: "",       
+        website: "",           
+        venue_categories: [],  
+        duration_months: "",
+        stipend: "",
+        work_detail: "",
+        internship_type:"",
+        eligibility:"",
+        perks:"",
+        requirements:"",
+        responsibilities:"",
         venue_rate: "",        
-        venue_overview: "",   
-        venue_map_url: "",    
-        venue_images: [],  
-        veg_package_price: "",
-        veg_package: [],    
-        non_veg_package_price: "",
-        non_veg_package: [], 
+        venue_overview: "",    
+        venue_map_url: "",     
+        venue_images: [],    
         city_name:"",
         region_name:"",
-        is_enable: true})
+        is_enable : true})
     }
   },[mode]);
 
@@ -235,29 +242,36 @@ const Index = () => {
       }
       try {
         const url = mode === "edit" ? `${api}/api/venue/update-venue/${state.venue_id}` : `${api}/api/venue/add-venue`;
+        
+        console.log(mode);
+        console.log(api);
         const response = await axios.post(url, ApiBody);
         if (response.data.results === true) {
           setVenueFormData({
-            venue_name: "",        // Venue name
-            venue_address: "",     // Venue address
-            state: "",             // State
-            pincode: "",           // Pincode
-            country: "",           // Country
-            venue_phone_no: "",    // Venue phone number
-            venue_email: "",       // Venue email
-            website: "",           // Website
-            venue_categories: [],  // Venue categories (will be an array for multiple selections)
-            venue_rate: "",        // Venue rate
-            venue_overview: "",    // Venue overview
-            venue_map_url: "",     // Venue map URL
-            venue_images: [],      // Venue images (Blob, default is null)
-            veg_package_price: "", // Veg package price
-            veg_package: [],       // Veg package
-            non_veg_package_price: "", // Non-veg package price
-            non_veg_package: [],   // Non-veg package
-            is_featured: false,
-            special_lable: ""
-          });
+            venue_name: "",        
+            venue_address: "",     
+            state: "",             
+            pincode: "",          
+            country: "",           
+            venue_phone_no: "",    
+            venue_email: "",       
+            website: "",           
+            venue_categories: [],  
+            duration_months: "",
+            stipend: "",
+            work_detail: "",
+            internship_type:"",
+            eligibility:"",
+            perks:"",
+            requirements:"",
+            responsibilities:"",
+            venue_rate: "",        
+            venue_overview: "",    
+            venue_map_url: "",     
+            venue_images: [],    
+            city_name:"",
+            region_name:"",
+            is_enable : true});
           navigate("/admin-dashboard/venues");
         } else {
           showAlert('something went wrong', 'error');
@@ -277,33 +291,34 @@ const Index = () => {
   return (
     <>
       <Tabs
-        className="tabs -underline-2 js-tabs"
-        selectedIndex={tabIndex}
-        onSelect={(index) => setTabIndex(index)}
-      >
-        <TabList className="tabs__controls row x-gap-40 y-gap-10 lg:x-gap-20">
-          {getTabs().map((tab, index) => (
-            <Tab key={index} className="col-auto">
-              <button className="tabs__button text-18 lg:text-16 text-light-1 fw-500 pb-5 lg:pb-0 js-tabs-button">
-                {tab.labelNo}. {tab.label}
-              </button>
-            </Tab>
-          ))}
-        </TabList>
+  className="tabs -underline-2 js-tabs"
+  selectedIndex={tabIndex}
+  onSelect={(index) => setTabIndex(index)}
+>
+  <TabList className="tabs__controls row x-gap-40 y-gap-10 lg:x-gap-20">
+    {getTabs().map((tab, index) => (
+      <Tab key={index} className="col-auto">
+        <button className="tabs__button text-18 lg:text-16 text-light-1 fw-500 pb-5 lg:pb-0 js-tabs-button">
+          {tab.labelNo}. {tab.label}
+        </button>
+      </Tab>
+    ))}
+  </TabList>
 
-        <div className="tabs__content pt-30 js-tabs-content">
-          {getTabs().map((tab, index) => (
-            <TabPanel
-              key={index}
-              className={`-tab-item-${index + 1} ${
-                tabIndex === index ? "is-tab-el-active" : ""
-              }`}
-            >
-              {tab.content}
-            </TabPanel>
-          ))}
-        </div>
-      </Tabs>
+  <div className="tabs__content pt-30 js-tabs-content">
+    {getTabs().map((tab, index) => (
+      <TabPanel
+        key={index}
+        className={`-tab-item-${index + 1} ${
+          tabIndex === index ? "is-tab-el-active" : ""
+        }`}
+      >
+        {tab.content}
+      </TabPanel>
+    ))}
+  </div>
+</Tabs>
+
       <div className="pt-30" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {errors.length !== 0 && <div className="text-15 lh-15 text-light-1 ml-10">
           {errors[0]}

@@ -171,19 +171,25 @@ const DetailsAndPricing = ({
         </div>
 
         {/* Internship Type/Timing */}
-        <div className="col-12">
-          <div className="form-input">
-            <input
-              type="text"
-              required
+        <div className="col-12 ">
+          <div className="form-input ">
+            <select
               name="internship_type"
+              required
               value={venueFormData?.internship_type || ""}
               onChange={handleChange}
-            />
-            <label className="lh-1 text-16 text-light-1">Internship Type/Timing</label>
+              className="form-select"
+            >
+              <option value="" disabled>Select Internship Type/Timing</option>
+              <option value="Full-Time">Full-Time (9am - 6pm)</option>
+              <option value="Part-Time">Part-Time (Flexible Hours)</option>
+              <option value="Hybrid">Hybrid (3 Days Office + Remote)</option>
+              <option value="Remote">Remote Only</option>
+              <option value="Weekend">Weekend Internship</option>
+              <option value="Night Shift">Night Shift Internship</option>
+            </select>
           </div>
         </div>
-
         {/* Work Detail */}
         <div className="col-12">
           <div className="form-input">
