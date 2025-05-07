@@ -13,13 +13,8 @@ const CategoriesMegaMenu = ({ setIsActiveParent }) => {
   const [activeNestedMenu, setActiveNestedMenu] = useState(0);
 
   const itemList = [
-    "Hotel",
-    "Tour",
-    "Activity",
-    "Holiday Rentals",
-    "Car",
-    "Cruise",
-    "Flights",
+    "Internship",
+    "Job",
   ];
 
   useEffect(() => {
@@ -88,7 +83,7 @@ const CategoriesMegaMenu = ({ setIsActiveParent }) => {
                 </li>
                 {/* End mega menu list left */}
 
-                <li className="mega__image d-flex relative">
+                {/* <li className="mega__image d-flex relative">
                   <img
                     src={megaCol?.megaBanner}
                     alt="image"
@@ -106,7 +101,7 @@ const CategoriesMegaMenu = ({ setIsActiveParent }) => {
                       {megaCol?.btnText}
                     </Link>
                   </div>
-                </li>
+                </li> */}
                 {/* End mega menu right images */}
               </ul>
             ),
