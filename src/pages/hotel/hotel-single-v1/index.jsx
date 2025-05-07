@@ -14,7 +14,10 @@ import DetailsReview from "@/components/hotel-single/guest-reviews/DetailsReview
 import ReplyForm from "@/components/hotel-single/ReplyForm";
 import ReplyFormReview from "@/components/hotel-single/ReplyFormReview";
 import Facilities from "@/components/hotel-single/Facilities";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { getId } from "@/utils/DOMUtils";
+import { api } from "@/utils/apiProvider";
 import Surroundings from "@/components/hotel-single/Surroundings";
 import HelpfulFacts from "@/components/hotel-single/HelpfulFacts";
 import Faq from "@/components/faq/Faq";
@@ -34,7 +37,31 @@ const metadata = {
 const HotelSingleV1Dynamic = () => {
   let params = useParams();
   const id = params.id;
+  console.log(id);
   const hotel = hotelsData.find((item) => item.id == id) || hotelsData[0];
+  const [internship, setInternship] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);  
+
+  const fetchInternship = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`${api}/api/venue/get-venue/${id}`);
+      setInternship(response.data || []);
+      console.log("Fetched internships for user:", response.data);      
+    } catch (err) {
+      setError("An error occurred while fetching internship data.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    fetchInternship();
+  }, [id]);
+  
 
   return (
     <>
@@ -64,7 +91,9 @@ const HotelSingleV1Dynamic = () => {
               <div className="row y-gap-40">
                 <div className="col-12">
                   <h3 className="text-22 fw-500">Property highlights</h3>
-                  <PropertyHighlights />
+                  {internship && Object.keys(internship).length > 0 && (
+  <PropertyHighlights internship={internship} />
+)}
                 </div>
                 {/* End .col-12 Property highlights */}
 

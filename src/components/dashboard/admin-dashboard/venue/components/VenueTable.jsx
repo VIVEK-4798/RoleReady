@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ActionsButton from "./ActionsButton";
 import { api } from "@/utils/apiProvider";
-// import { showAlert } from "@/utils/isTextMatched";
 import { useNavigate } from "react-router-dom";
 import { getId } from "@/utils/DOMUtils";
 import "../../../../../styles/modals.css";

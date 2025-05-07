@@ -22,6 +22,9 @@ const MainMenu = ({ style = "" }) => {
   return (
     <nav className="menu js-navList">
       <ul className={`menu__nav ${style} -is-active`}>
+
+        <Link to="/hotel-list-v4">Internships</Link>
+        <Link to="/tour-list-v2">Jobs</Link>
         {/* <li
           className={`${
             isActiveParentChaild(homeItems, pathname) ? "current" : ""
@@ -46,7 +49,7 @@ const MainMenu = ({ style = "" }) => {
         </li> */}
         {/* End home page menu */}
 
-        <li
+        {/* <li
           className={
             isActiveParent
               ? "menu-item-has-children -has-mega-menu current"
@@ -60,7 +63,7 @@ const MainMenu = ({ style = "" }) => {
           <div className="mega">
             <CategoriesMegaMenu setIsActiveParent={setIsActiveParent} />
           </div>
-        </li>
+        </li> */}
         {/* End categories menu items */}
 
         {/* <li className={pathname === "/destinations" ? "current" : ""}>

@@ -66,11 +66,11 @@ const HeaderDashBoard = () => {
 
             <div className="col-auto">
               <div className="d-flex items-center">
-                <div className="header-menu">
+                {/* <div className="header-menu">
                   <div className="header-menu__content">
                     <MainMenu style="text-dark-1" />
                   </div>
-                </div>
+                </div> */}
                 {/* End header-menu */}
 
                 {/* <div className="row items-center x-gap-5 y-gap-20 pl-20 lg:d-none">
