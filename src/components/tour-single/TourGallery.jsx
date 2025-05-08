@@ -9,6 +9,17 @@ import ModalVideo from "react-modal-video";
 
 export default function TourGallery({ tour }) {
   const [isOpen, setOpen] = useState(false);
+
+  // Parse DB images (portfolio) and fallback default images
+  const dbImages = tour?.portfolio ? JSON.parse(tour.portfolio) : [];
+  const defaultImages = [
+    "/img/jobsCategory/Sales&BusinessDevelopment.png",
+    "/img/jobsCategory/HumanResources.jpg",
+    "/img/jobsCategory/ContentWriting.png",
+    "/img/jobsCategory/officeInside.webp",
+  ];
+  const allImages = [...dbImages, ...defaultImages];
+
   return (
     <>
       <ModalVideo
@@ -32,43 +43,41 @@ export default function TourGallery({ tour }) {
                     prevEl: ".js-img-prev",
                   }}
                 >
-                  {tour?.slideImg?.map((slide, i) => (
+                  {allImages.map((img, i) => (
                     <SwiperSlide key={i}>
                       <img
-                        src={slide}
-                        alt="image"
-                        style={{ height: "501px" }}
-                        className="rounded-4 col-12 cover object-cover"
+                        src={img}
+                        alt={`slide-${i}`}
+                        style={{ height: "501px", objectFit: "cover" }}
+                        className="rounded-4 col-12"
                       />
                     </SwiperSlide>
                   ))}
                 </Swiper>
 
                 <Gallery>
-                  {tour?.slideImg?.map((slide, i) => (
-                    <div
-                      className="absolute px-10 py-10 col-12 h-full d-flex justify-end items-end z-2 bottom-0 end-0"
-                      key={i}
+                  <div
+                    className="absolute px-10 py-10 col-12 h-full d-flex justify-end items-end z-2 bottom-0 end-0"
+                    key="gallery-button"
+                  >
+                    <Item
+                      original={allImages[0]}
+                      thumbnail={allImages[0]}
+                      width={451}
+                      height={450}
                     >
-                      <Item
-                        original={slide}
-                        thumbnail={slide}
-                        width={451}
-                        height={450}
-                      >
-                        {({ ref, open }) => (
-                          <div
-                            className="button -blue-1 px-24 py-15 bg-white text-dark-1 js-gallery"
-                            ref={ref}
-                            onClick={open}
-                            role="button"
-                          >
-                            See All Photos
-                          </div>
-                        )}
-                      </Item>
-                    </div>
-                  ))}
+                      {({ ref, open }) => (
+                        <div
+                          className="button -blue-1 px-24 py-15 bg-white text-dark-1 js-gallery"
+                          ref={ref}
+                          onClick={open}
+                          role="button"
+                        >
+                          See All Photos
+                        </div>
+                      )}
+                    </Item>
+                  </div>
                 </Gallery>
 
                 <div className="absolute h-full col-11">
@@ -79,30 +88,19 @@ export default function TourGallery({ tour }) {
                     <i className="icon icon-chevron-right text-12" />
                   </button>
                 </div>
-                {/* End prev nav button wrapper */}
               </div>
-              {/* End relative */}
 
-              {/* slider gallery */}
-
-              <h3 className="text-22 fw-500 mt-40">Tour snapshot</h3>
+              <h3 className="text-22 fw-500 mt-40">Job highlights</h3>
               <TourSnapShot />
-              {/* End toursnapshot */}
               <div className="border-top-light mt-40 mb-40"></div>
-
               <Overview />
-              {/* End  Overview */}
             </div>
-            {/* End .col-xl-8 */}
 
             <div className="col-xl-4">
               <SidebarRight tour={tour} />
             </div>
-            {/* End .col-xl-4 */}
           </div>
-          {/* End .row */}
         </div>
-        {/* End container */}
       </section>
     </>
   );

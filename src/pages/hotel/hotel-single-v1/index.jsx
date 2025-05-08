@@ -30,9 +30,10 @@ import { useParams } from "react-router-dom";
 import MetaComponent from "@/components/common/MetaComponent";
 
 const metadata = {
-  title: "Hotel Single v1 || GoTrip - Travel & Tour ReactJs Template",
-  description: "GoTrip - Travel & Tour ReactJs Template",
+  title: "Internship Single || GoHire - Internship & Career React Template",
+  description: "Explore detailed internship opportunities on GoHire.",
 };
+
 
 const HotelSingleV1Dynamic = () => {
   let params = useParams();

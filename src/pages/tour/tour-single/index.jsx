@@ -14,18 +14,44 @@ import { Link, useParams } from "react-router-dom";
 import Itinerary from "@/components/tour-single/itinerary";
 import ImportantInfo from "@/components/tour-single/ImportantInfo";
 import TourGallery from "@/components/tour-single/TourGallery";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { api } from "@/utils/apiProvider";
 
 import MetaComponent from "@/components/common/MetaComponent";
 
 const metadata = {
-  title: "Tour Single || GoTrip - Travel & Tour ReactJs Template",
-  description: "GoTrip - Travel & Tour ReactJs Template",
+  title: "Job Single || GoHire - Job Listing & Recruitment React Template",
+  description: "Explore detailed job listings on GoHire.",
 };
 
 const TourSingleV1Dynamic = () => {
   let params = useParams();
   const id = params.id;
   const tour = toursData.find((item) => item.id == id) || toursData[0];
+
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);  
+
+  const fetchInternship = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`${api}/api/vendor/get-vendor/${id}`);
+      console.log(response.data.result);
+      setJob(response.data.result || []);
+    } catch (err) {
+      setError("An error occurred while fetching job data.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    fetchInternship();
+  }, [id]);
 
   return (
     <>
@@ -37,35 +63,17 @@ const TourSingleV1Dynamic = () => {
 
       <Header11 />
       {/* End Header 1 */}
-
-      <TopBreadCrumb />
+      {job && Object.keys(job).length > 0 && (
+          <TopBreadCrumb job={job}/>
+        )}
       {/* End top breadcrumb */}
 
       <section className="pt-40">
         <div className="container">
           <div className="row y-gap-20 justify-between items-end">
             <div className="col-auto">
-              <h1 className="text-30 fw-600">{tour?.title}</h1>
+              <h1 className="text-30 fw-600">{job?.vendor_name}</h1>
               <div className="row x-gap-20 y-gap-20 items-center pt-10">
-                <div className="col-auto">
-                  <div className="d-flex items-center">
-                    <div className="d-flex x-gap-5 items-center">
-                      <i className="icon-star text-10 text-yellow-1"></i>
-
-                      <i className="icon-star text-10 text-yellow-1"></i>
-
-                      <i className="icon-star text-10 text-yellow-1"></i>
-
-                      <i className="icon-star text-10 text-yellow-1"></i>
-
-                      <i className="icon-star text-10 text-yellow-1"></i>
-                    </div>
-
-                    <div className="text-14 text-light-1 ml-10">
-                      {tour?.numberOfReviews} reviews
-                    </div>
-                  </div>
-                </div>
 
                 <div className="col-auto">
                   <div className="row x-gap-10 items-center">
@@ -73,18 +81,20 @@ const TourSingleV1Dynamic = () => {
                       <div className="d-flex x-gap-5 items-center">
                         <i className="icon-placeholder text-16 text-light-1"></i>
                         <div className="text-15 text-light-1">
-                          {tour?.location}
+                          {job?.region_name}, {job?.city_name}
                         </div>
                       </div>
                     </div>
 
                     <div className="col-auto">
-                      <button
-                        data-x-click="mapFilter"
+                      <a
+                        href={job?.maplink}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-blue-1 text-15 underline"
                       >
                         Show on map
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
