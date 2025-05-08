@@ -159,9 +159,11 @@ const HotelSingleV1Dynamic = () => {
         <div className="container">
           <div className="row x-gap-40 y-gap-40">
             <div className="col-12">
-              <h3 className="text-22 fw-500">Facilities of this Hotel</h3>
+              <h3 className="text-22 fw-500">Intern Requirements</h3>
               <div className="row x-gap-40 y-gap-40 pt-20">
-                <Facilities />
+              {internship && Object.keys(internship).length > 0 && (
+                  <Facilities internship={internship}/>
+                )}
               </div>
               {/* End .row */}
             </div>
@@ -173,21 +175,39 @@ const HotelSingleV1Dynamic = () => {
       </section>
       {/* End facilites section */} 
 
-      <section className="pt-40" id="reviews">
+      <section className="pt-40">
+        <div className="container">
+          <div className="pt-40 border-top-light">
+            <div className="row">
+              <div className="col-12">
+                <h3 className="text-22 fw-500">Intern Perks</h3>
+              </div>
+            </div>
+            {/* End .row */}
+
+            <div className="row x-gap-50 y-gap-30 pt-20">
+              <HelpfulFacts />
+            </div>
+            {/* End .row */}
+          </div>
+          {/* End .pt-40 */}
+        </div>
+        {/* End .container */}
+      </section>
+      {/* End helpful facts surroundings */}
+
+      {/* <section className="pt-40" id="reviews">
         <div className="container">
           <div className="row">
             <div className="col-12">
               <h3 className="text-22 fw-500">Guest reviews</h3>
             </div>
           </div>
-          {/* End .row */}
 
           <ReviewProgress />
-          {/* End review with progress */}
 
           <div className="pt-40">
             <DetailsReview />
-            {/* End review with details */}
           </div>
 
           <div className="row pt-30">
@@ -198,11 +218,8 @@ const HotelSingleV1Dynamic = () => {
               </a>
             </div>
           </div>
-          {/* End .row */}
         </div>
-        {/* End .container */}
-        {/* End container */}
-      </section>
+      </section> */}
       {/* End Review section */}
 
       <section className="pt-40">
@@ -257,44 +274,20 @@ const HotelSingleV1Dynamic = () => {
       </section>
       {/* End health &  safety measures section */}
 
-      <section className="pt-40">
+      {/* <section className="pt-40">
         <div className="container">
           <div className="row">
             <div className="col-12">
               <h3 className="text-22 fw-500">Hotel surroundings</h3>
             </div>
           </div>
-          {/* End .row */}
 
           <div className="row x-gap-50 y-gap-30 pt-20">
             <Surroundings />
           </div>
-          {/* End .row */}
         </div>
-        {/* End .container */}
-      </section>
+      </section> */}
       {/* End hotel surroundings */}
-
-      <section className="pt-40">
-        <div className="container">
-          <div className="pt-40 border-top-light">
-            <div className="row">
-              <div className="col-12">
-                <h3 className="text-22 fw-500">Some helpful facts</h3>
-              </div>
-            </div>
-            {/* End .row */}
-
-            <div className="row x-gap-50 y-gap-30 pt-20">
-              <HelpfulFacts />
-            </div>
-            {/* End .row */}
-          </div>
-          {/* End .pt-40 */}
-        </div>
-        {/* End .container */}
-      </section>
-      {/* End helpful facts surroundings */}
 
       <section id="faq" className="pt-40 layout-pb-md">
         <div className="container">
