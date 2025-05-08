@@ -15,44 +15,55 @@ const PropertyHighlights2 = ({ internship }) => {
     {
       title: "Internship Location(s)",
       value: `${region_name || ""}, ${city_name || ""}`,
-      icon: "icon-location",
+      icon: "bi bi-geo-alt",
     },
     {
       title: "Internship Duration",
       value: `${duration_months} months`,
-      icon: "icon-calendar",
+      icon: "bi bi-calendar",
     },
     {
       title: "Internship Type",
       value: stipend === "0" ? "Unpaid" : "Paid",
-      icon: "icon-wallet",
+      icon: "bi bi-wallet2",
     },
     {
       title: "Work Detail",
       value: work_detail || "Working Days: 5 Days",
-      icon: "icon-clipboard",
+      icon: "bi bi-clipboard",
     },
     {
       title: "Internship Type/Timing",
       value: `Type: Hybrid\nTiming: ${internship_type}`,
-      icon: "icon-clock",
+      icon: "bi bi-clock",
     },
     {
       title: "Perks",
       value: perks?.split(",").join("\n") || "None",
-      icon: "icon-gift",
+      icon: "bi bi-gift",
     },
   ];
+  
 
   return (
-    <div className="row y-gap-20 pt-30">
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", paddingTop: "30px" }}>
       {highlightCards.map((item, index) => (
-        <div className="col-md-6 col-lg-4" key={index}>
-          <div className="bg-light rounded p-20 h-100 d-flex align-items-start gap-15">
-            <i className={`${item.icon} text-24 text-primary mt-5`} />
+        <div key={index} style={{ width: "100%", maxWidth: "33.33%", boxSizing: "border-box", padding: "10px" }}>
+          <div
+            style={{
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              padding: "20px",
+              height: "100%",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "15px",
+            }}
+          >
+            <i className={item.icon} style={{ fontSize: "24px", color: "#007bff", marginTop: "5px" }} />
             <div>
-              <div className="fw-bold text-16">{item.title}</div>
-              <div className="text-14 mt-5 white-space-pre-line">{item.value}</div>
+              <div style={{ fontWeight: "bold", fontSize: "16px" }}>{item.title}</div>
+              <div style={{ fontSize: "14px", marginTop: "5px", whiteSpace: "pre-line" }}>{item.value}</div>
             </div>
           </div>
         </div>

@@ -73,14 +73,19 @@ const HotelSingleV1Dynamic = () => {
 
       <Header11 />
       {/* End Header 1 */}
-
-      <TopBreadCrumb />
+        {internship && Object.keys(internship).length > 0 && (
+          <TopBreadCrumb internship={internship}/>
+        )}
       {/* End top breadcrumb */}
-
-      <StickyHeader hotel={hotel} />
+      {internship && Object.keys(internship).length > 0 && (
+          <StickyHeader internship={internship} />
+        )}
       {/* sticky single header for hotel single */}
 
-      <GalleryOne hotel={hotel} />
+      {internship && Object.keys(internship).length > 0 && (
+          <GalleryOne internship={internship} />
+        )}
+      
 
       {/* End gallery grid wrapper */}
 
@@ -90,24 +95,28 @@ const HotelSingleV1Dynamic = () => {
             <div className="col-xl-8">
               <div className="row y-gap-40">
                 <div className="col-12">
-                  <h3 className="text-22 fw-500">Property highlights</h3>
+                  <h3 className="text-22 fw-500">Internship highlights</h3>
                   {internship && Object.keys(internship).length > 0 && (
-  <PropertyHighlights internship={internship} />
-)}
+                    <PropertyHighlights internship={internship} />
+                  )}
                 </div>
                 {/* End .col-12 Property highlights */}
 
                 <div id="overview" className="col-12">
-                  <Overview />
+                {internship && Object.keys(internship).length > 0 && (
+                  <Overview internship={internship}/>
+                )}
                 </div>
                 {/* End .col-12  Overview */}
 
                 <div className="col-12">
                   <h3 className="text-22 fw-500 pt-40 border-top-light">
-                    Most Popular Facilities
+                    Intern Responsibilities
                   </h3>
                   <div className="row y-gap-10 pt-20">
-                    <PopularFacilities />
+                  {internship && Object.keys(internship).length > 0 && (
+                  <PopularFacilities internship={internship}/>
+                )}
                   </div>
                 </div>
                 {/* End .col-12 Most Popular Facilities */}
@@ -132,19 +141,35 @@ const HotelSingleV1Dynamic = () => {
       </section>
       {/* End single page content */}
 
-      <section id="rooms" className="pt-30">
+      {/* <section id="rooms" className="pt-30">
         <div className="container">
           <div className="row pb-20">
             <div className="col-auto">
               <h3 className="text-22 fw-500">Available Rooms</h3>
             </div>
           </div>
-          {/* End .row */}
           <AvailableRooms hotel={hotel} />
+        </div>
+      </section> */}
+      {/* End Available Rooms */}
+
+      <section className="mt-40" id="facilities">
+        <div className="container">
+          <div className="row x-gap-40 y-gap-40">
+            <div className="col-12">
+              <h3 className="text-22 fw-500">Facilities of this Hotel</h3>
+              <div className="row x-gap-40 y-gap-40 pt-20">
+                <Facilities />
+              </div>
+              {/* End .row */}
+            </div>
+            {/* End .col-12 */}
+          </div>
+          {/* End .row */}
         </div>
         {/* End .container */}
       </section>
-      {/* End Available Rooms */}
+      {/* End facilites section */} 
 
       <section className="pt-40" id="reviews">
         <div className="container">
@@ -201,24 +226,6 @@ const HotelSingleV1Dynamic = () => {
         </div>
       </section>
       {/* End Reply Comment box section */}
-
-      <section className="mt-40" id="facilities">
-        <div className="container">
-          <div className="row x-gap-40 y-gap-40">
-            <div className="col-12">
-              <h3 className="text-22 fw-500">Facilities of this Hotel</h3>
-              <div className="row x-gap-40 y-gap-40 pt-20">
-                <Facilities />
-              </div>
-              {/* End .row */}
-            </div>
-            {/* End .col-12 */}
-          </div>
-          {/* End .row */}
-        </div>
-        {/* End .container */}
-      </section>
-      {/* End facilites section */}
 
       <section className="pt-40">
         <div className="container">
