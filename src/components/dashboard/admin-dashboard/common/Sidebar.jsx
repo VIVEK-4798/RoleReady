@@ -16,12 +16,6 @@ const Sidebar = () => {
       allowedRole: ["admin", "venue-user", "vendor-user"],
     },
     {
-      icon: "/img/dashboard/sidebar/gear.svg",
-      title: "Claimed Listings",
-      href: "claim-business",
-      allowedRole: ["admin"],
-    },
-    {
       icon: "/img/dashboard/sidebar/house.svg",
       title: "Internships",
       allowedRole: ["admin", "venue-user"],

@@ -1,25 +1,24 @@
 const RatingTag = () => {
   return (
-    <>
-      <div className="px-24 py-20 rounded-4 bg-green-1">
-        <div className="row x-gap-20 y-gap-20 items-center">
-          <div className="col-auto">
-            <div className="flex-center size-60 rounded-full bg-white">
-              <i className="icon-star text-yellow-1 text-30"></i>
-            </div>
+    <div className="demand-banner">
+      <div className="demand-content">
+        <div className="demand-badge">
+          <div className="pulse-effect"></div>
+          <i className="bi bi-lightning-charge-fill"></i>
+        </div>
+        
+        <div className="demand-text">
+          <h3 className="demand-title">This opportunity is in high demand!</h3>
+          <p className="demand-stats">
+            <span className="highlight-count">133</span> applicants have applied today
+          </p>
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: '85%' }}></div>
           </div>
-
-          <div className="col-auto">
-            <h4 className="text-18 lh-15 fw-500">
-              This internship is in high demand!
-            </h4>
-            <div className="text-15 lh-15">
-              133 applicants have applied today.
-            </div>
-          </div>
+          <p className="demand-notice">Apply soon to secure your spot</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -59,6 +59,7 @@ import DBWishlist from "./pages/dashboard/dashboard/db-wishlist";
 import DBSettings from "./pages/dashboard/dashboard/db-settings";
 import VendorAddHotel from "./pages/dashboard/vendor-dashboard/add-hotel";
 import VendorBooking from "./pages/dashboard/vendor-dashboard/booking";
+import MentorBooking from "./pages/dashboard/mentor-dashboard/booking";
 import BVVendorHotel from "./pages/dashboard/vendor-dashboard/hotels";
 import BDVendorRecovery from "./pages/dashboard/vendor-dashboard/recovery";
 import VendorDashboard from "./pages/dashboard/vendor-dashboard/dashboard";
@@ -97,6 +98,7 @@ import FlightListPage1 from "./pages/flight/flight-list-v1";
 import Contact from "./pages/others/contact";
 import Destinations from "./pages/others/destinations";
 import Pricing from "./pages/pricing";
+import CollegeTPO from "./pages/collegeTPO";
 import VendorMarketingOverview from "./pages/dashboard/vendor-dashboard/overview";
 import MentorMarketingOverview from "./pages/dashboard/mentor-dashboard/overview";
 import VendorMarketingGoogle from "./pages/dashboard/vendor-dashboard/marketing-google";
@@ -109,6 +111,11 @@ import VendorInstagram from "./pages/dashboard/vendor-dashboard/instagram";
 import MentorInstagram from "./pages/dashboard/mentor-dashboard/instagram";
 import VendorWebpage from "./pages/dashboard/vendor-dashboard/webpage";
 import MentorWebpage from "./pages/dashboard/mentor-dashboard/webpage";
+import MentorAddVenue from "./pages/dashboard/mentor-dashboard/add-venue";
+import MentorAddVendor from "./pages/dashboard/mentor-dashboard/add-vendor";
+import MentorVendors from "./pages/dashboard/mentor-dashboard/vendors";
+import MentorVenue from "./pages/dashboard/mentor-dashboard/venue";
+
 
 function App() {
   useEffect(() => {
@@ -142,6 +149,7 @@ function App() {
               <Route path="home_10" element={<Home_10 />} />
 
               <Route path="pricing" element={<Pricing />} />
+              <Route path="collegeTPO" element={<CollegeTPO />} />
 
               <Route path="store">
                 <Route path=":project" element={<Home />} />
@@ -192,7 +200,7 @@ function App() {
                   <Route path="booking" element={<AdminBooking />} />
                   <Route path="hotels" element={<BVAdminHotel />} />
                   <Route path="recovery" element={<BDAdminRecovery />} />
-                   */}
+                  */}
               </Route>
 
               <Route path="vendor-dashboard">
@@ -223,7 +231,10 @@ function App() {
               <Route path="mentor-dashboard">
                 <Route path="dashboard" element={<MentorDashboard />} />
                 <Route path="profile" element={<MentorProfile />} />
-
+                <Route path="venues" element={<MentorVenue />} />
+                <Route path="venue/:mode" element={<MentorAddVenue />} />
+                <Route path="vendor/:mode" element={<MentorAddVendor />} />
+                <Route path="vendors" element={<MentorVendors />} />
                 {/* marketing sub section starts*/}
                 <Route path="overview" element={<MentorMarketingOverview />} />
                 <Route path="google_ads" element={<MentorMarketingGoogle />} />
@@ -240,7 +251,7 @@ function App() {
                 {/* single tabs */}
 
                 <Route path="add-hotel" element={<VendorAddHotel />} />
-                <Route path="booking" element={<VendorBooking />} />
+                <Route path="booking" element={<MentorBooking />} />
                 <Route path="hotels" element={<BVVendorHotel />} />
                 <Route path="recovery" element={<BDVendorRecovery />} />
               </Route>

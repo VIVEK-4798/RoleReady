@@ -129,7 +129,6 @@ const HotelSingleV1Dynamic = () => {
         <div className="container">
           <div className="row x-gap-40 y-gap-40">
             <div className="col-12">
-              <h3 className="text-22 fw-500">Intern Requirements</h3>
               <div className="row x-gap-40 y-gap-40 pt-20">
               {internship && Object.keys(internship).length > 0 && (
                   <Facilities internship={internship}/>
@@ -145,7 +144,6 @@ const HotelSingleV1Dynamic = () => {
           <div className="pt-40 border-top-light">
             <div className="row">
               <div className="col-12">
-                <h3 className="text-22 fw-500">Intern Perks</h3>
               </div>
             </div>
             {/* End .row */}

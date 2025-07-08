@@ -1,39 +1,52 @@
 import { api } from "@/utils/apiProvider";
-// import { showAlert } from "@/utils/isTextMatched";
 import axios from "axios";
 import { useState } from "react";
 import { DateObject } from "react-multi-date-picker";
+import { toast } from 'react-toastify';
 
 const ActionsButton = ({booking, setShowModal, setBookingData, setUpdate, update}) => {
   const [activeFilter, setActiveFilter] = useState("all");
 
-  const handleFilterClick = (filter, booking) => {
-    setActiveFilter(filter);
-    if (filter === "delete") {
-      deleteBooking(booking.booking_id);
-    } else if (filter === "edit") {
-      setBookingData({
-        ...booking, 
-        booking_dates: JSON.parse(booking.booking_dates).split(",").map((date) => {return new DateObject({ date, format: "DD MMMM YYYY" }).format("DD MMMM YYYY")}),
-        appointment_date : booking.appointment_date
-      });
-      setShowModal(true);
+const handleFilterClick = (filter, booking) => {
+  setActiveFilter(filter);
+  if (filter === "delete") {
+    deleteBooking(booking.booking_id);
+  } else if (filter === "edit") {
+    let parsedDates;
+    try {
+      parsedDates = JSON.parse(booking.booking_dates);
+    } catch (err) {
+      parsedDates = [];
     }
-  };
+
+    setBookingData({
+      ...booking, 
+      booking_dates: Array.isArray(parsedDates)
+        ? parsedDates.map((date) =>
+            new DateObject({ date, format: "DD MMMM YYYY" }).format("DD MMMM YYYY")
+          )
+        : [],
+      appointment_date: booking.appointment_date,
+    });
+
+    setShowModal(true);
+  }
+};
+
 
   const deleteBooking = async (id) => {
     try {
       const response = await axios.delete(`${api}/api/booking/delete-booking/${id}`);
       if (response.data.success) {
-        showAlert(response.data.message);
+        toast.success(response.data.message); 
         setUpdate(!update);
       } else {
-        showAlert("Something went wrong","success");
+        toast.error("Something went wrong"); 
       }
     } catch (error) {
-      showAlert("Something went wrong");
+      toast.error("Something went wrong");
     }
-  }
+  };
 
   const filters = [
     { label: "Edit", value: "edit" },

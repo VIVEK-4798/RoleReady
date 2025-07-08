@@ -1,11 +1,11 @@
 import React from "react";
-import DashboardPage from "../../../../components/dashboard/vendor-dashboard/booking";
+import DashboardPage from "../../../../components/dashboard/mentor-dashboard/booking";
 
 import MetaComponent from "@/components/common/MetaComponent";
 
 const metadata = {
-  title: "Vendor History || GoTrip - Travel & Tour ReactJs Template",
-  description: "GoTrip - Travel & Tour ReactJs Template",
+  title: "Applicants History || Startups24x7 - All-in-One Platform for Startup Services",
+  description: "Startups24x7 - All-in-One Platform for Startup Services",
 };
 
 export default function VendorBooking() {

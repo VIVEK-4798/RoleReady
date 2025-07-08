@@ -7,7 +7,7 @@ const { swaggerUi, swaggerSpec } = require("./swagger");
 
 const corsOptions = {
   origin: 'http://localhost:5173',  
-  //'https://startups.com', // Replace with your frontend domain
+  // origin: 'https://startups24x7.com',  
   methods: 'GET,POST,PUT,DELETE',
   credentials: true
 };
@@ -35,6 +35,7 @@ const packagesService = require('./service/packagesService.js');
 const emailService = require('./service/emailService.js');
 const profileService = require('./service/profileService.js');
 const userActivityService = require('./service/userActivityService.js');
+const collegeService = require('./service/collegeService');
 
 // routes
 app.use('/api/user', userService);
@@ -54,6 +55,7 @@ app.use('/api/email', emailService);
 app.use("", googleAuth);
 app.use('/api/profile', profileService);
 app.use('/api/user-activity', userActivityService);
+app.use('/api/college', collegeService);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 

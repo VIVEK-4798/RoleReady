@@ -1,43 +1,63 @@
 import FilterBox from "../../components/tour-single/filter-box";
 
-const SidebarRight = ({ tour }) => {
+const SidebarRight = ({ job }) => {
   return (
-    <div className="d-flex justify-end js-pin-content">
-      <div className="w-360 lg:w-full d-flex flex-column items-center">
-        <div className="px-30 py-30 rounded-4 border-light bg-white shadow-4">
-          <div className="text-14 text-light-1">
-            From{" "}
-            <span className="text-20 fw-500 text-dark-1 ml-5">
-              US${tour?.price}
-            </span>
+    <aside className="sidebar-right">
+      <div className="sidebar-card">
+        <div className="internship-details">
+          {/* Salary */}
+          <div className="detail-section stipend-section">
+            <div className="detail-icon">
+              <i className="bi bi-cash-stack"></i>
+            </div>
+            <div className="detail-content">
+              <span className="detail-value">₹{job?.job_salary || 'Negotiable'}</span>
+              <span className="detail-label">Monthly Salary</span>
+            </div>
           </div>
-          {/* End div */}
 
-          <div className="row y-gap-20 pt-30">
+          {/* Job Type */}
+          <div className="detail-section">
+            <div className="detail-icon">
+              <i className="bi bi-briefcase"></i>
+            </div>
+            <div className="detail-content">
+              <span className="detail-label">Job Type</span>
+              <span className="detail-value">{job?.job_type || 'Not specified'}</span>
+            </div>
+          </div>
+
+          {/* Experience */}
+          <div className="detail-section">
+            <div className="detail-icon">
+              <i className="bi bi-calendar-check"></i>
+            </div>
+            <div className="detail-content">
+              <span className="detail-label">Experience</span>
+              <span className="detail-value">
+                {job?.work_experience || '0'} year{job?.work_experience !== "1" ? "s" : ""}
+              </span>
+            </div>
+          </div>
+
+          {/* Work Details */}
+          <div className="detail-section">
+            <div className="detail-icon">
+              <i className="bi bi-clipboard-check"></i>
+            </div>
+            <div className="detail-content">
+              <span className="detail-label">Work Detail</span>
+              <span className="detail-value">{job?.work_detail || 'Flexible schedule'}</span>
+            </div>
+          </div>
+        </div>
+
+          {/* FilterBox */}
+          <div className="filter-box-container">
             <FilterBox />
           </div>
-          {/* End div */}
-
-          <div className="d-flex items-center pt-20">
-            <div className="size-40 flex-center bg-light-2 rounded-full">
-              <i className="icon-heart text-16 text-green-2" />
-            </div>
-            <div className="text-14 lh-16 ml-10">
-              94% of travelers recommend this experience
-            </div>
-          </div>
-        </div>
-        {/* End px-30 */}
-
-        <div className="px-30">
-          <div className="text-14 text-light-1 mt-30">
-            Not sure? You can cancel this reservation up to 24 hours in advance
-            for a full refund.
-          </div>
-        </div>
-        {/* End div */}
       </div>
-    </div>
+    </aside>
   );
 };
 

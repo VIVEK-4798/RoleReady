@@ -109,7 +109,7 @@ const BasicInformation = ({
                 value={venueFormData?.venue_address}
                 onChange={handleChange}
               />
-              <label className="lh-1 text-16 text-light-1">Internship Address <span style={{ color: 'red', fontWeight: '500' }}>*</span></label>
+              <label className="lh-1 text-16 text-light-1">Internship Company<span style={{ color: 'red', fontWeight: '500' }}>*</span></label>
             </div>
           </div>
           <div className="col-6">

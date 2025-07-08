@@ -3,13 +3,11 @@ import { useEffect, useState } from "react";
 import MainMenu from "../MainMenu";
 import CurrenctyMegaMenu from "../CurrenctyMegaMenu";
 import LanguageMegaMenu from "../LanguageMegaMenu";
-
 import MobileMenu from "../MobileMenu";
 
 const Header1 = () => {
   const [navbar, setNavbar] = useState(false);
   const user = sessionStorage.getItem("user");
-  
 
   const changeBackground = () => {
     if (window.scrollY >= 10) {
@@ -37,53 +35,54 @@ const Header1 = () => {
                   <img src="/img/logo/startups24x7.png" alt="logo icon" />
                   <img src="/img/logo/startups24x7.png" alt="logo icon" />
                 </Link>
-                {/* End logo */}
 
                 <div className="header-menu">
                   <div className="header-menu__content">
                     <MainMenu style="text-dark-1" />
                   </div>
                 </div>
-                {/* End header-menu */}
               </div>
-              {/* End d-flex */}
             </div>
-            {/* End col */}
 
             <div className="col-auto">
               <div className="d-flex items-center">
-                <div className="row x-gap-20 items-center xxl:d-none">
-                  {/* <CurrenctyMegaMenu textClass="text-dark-1" /> */}
-                  {/* End Megamenu for Currencty */}
-
-                  {/* Start vertical devider*/}
-                  {/* <Link
-                    to="/pricing"
-                    className="button px-30 fw-400 text-14 -white h-50 text-dark-1"
-                  >
-                    Pricing
-                  </Link>
-                  <div className="col-auto">
-                    <div className="w-1 h-20 bg-black-20" />
-                  </div> */}
-                  {/* End vertical devider*/}
-
-                  {/* <LanguageMegaMenu textClass="text-dark-1" /> */}
-                  {/* End Megamenu for Language */}
-                </div>
-                {/* End language and currency selector */}
-
-                {/* Start btn-group */}
                 <div className="d-flex items-center is-menu-opened-hide md:d-none">
+
+                  {/* Conditionally render Post Job button */}
+                  {(user === "mentor" || user === "admin") && (
+                    <Link
+                      to="/mentor-dashboard/vendor/add"
+                      className="button px-30 fw-400 text-14 h-50 mr-20"
+                      style={{
+                        border: "2px solid #5693C1",
+                        color: "#5693C1",
+                        transition: "all 0.3s ease",
+                        backgroundColor: "transparent",
+                        fontWeight:"600",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = "#5693C1";
+                        e.target.style.color = "white";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.color = "#5693C1";
+                      }}
+                    >
+                      Post Job
+                    </Link>
+                  )}
                   <Link
                     to="/pricing"
                     className="button px-30 fw-400 text-14 -white h-50 text-dark-1"
                   >
                     Pricing
                   </Link>
+
                   <div className="col-auto">
                     <div className="w-1 h-20 bg-black-20" />
                   </div>
+
                   <Link
                     to={
                       user === "mentor"
@@ -98,6 +97,7 @@ const Header1 = () => {
                   >
                     {user ? "Dashboard" : "Login"}
                   </Link>
+
                   <Link
                     to="/signup"
                     className="button px-30 fw-400 text-14 border-black -outline-black h-50 ml-20"
@@ -105,9 +105,8 @@ const Header1 = () => {
                     Get started for Free
                   </Link>
                 </div>
-                {/* End btn-group */}
 
-                {/* Start mobile menu icon */}
+                {/* Mobile icon buttons */}
                 <div className="d-none xl:d-flex x-gap-20 items-center pl-30 text-dark-1">
                   <div>
                     <Link
@@ -122,30 +121,25 @@ const Header1 = () => {
                       aria-controls="mobile-sidebar_menu"
                       data-bs-target="#mobile-sidebar_menu"
                     />
-
                     <div
-                      className="offcanvas offcanvas-start  mobile_menu-contnet"
+                      className="offcanvas offcanvas-start mobile_menu-contnet"
                       tabIndex="-1"
                       id="mobile-sidebar_menu"
                       aria-labelledby="offcanvasMenuLabel"
                       data-bs-scroll="true"
                     >
                       <MobileMenu />
-                      {/* End MobileMenu */}
                     </div>
                   </div>
                 </div>
-                {/* End mobile menu icon */}
               </div>
             </div>
-            {/* End col-auto */}
           </div>
-          {/* End .row */}
         </div>
-        {/* End header_container */}
       </header>
     </>
   );
 };
 
 export default Header1;
+  

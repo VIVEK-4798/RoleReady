@@ -190,16 +190,28 @@ const Index = () => {
     }
   ];
 
-  const getTabs = () => {
-    if (localStorage.getItem("role") === "admin" && defaultTabs.some((tab)=>{return tab.label !== "Administrative Control"})) {
-      defaultTabs.push({
-        label: "Administrative Control",
-        labelNo: 4,
-        content: <AdministrativeControl venueFormData={venueFormData} handleChange={handleChange} handleCheckBox={handleCheckBox} handleDropDownChange={handleDropDownChange} />,
-      })
-    }
-    return defaultTabs;
-  }
+    const getTabs = () => {
+      const role = localStorage.getItem("role");
+
+      const hasAdminTab = defaultTabs.some(tab => tab.label === "Administrative Control");
+
+      if (role === "admin" && !hasAdminTab) {
+        defaultTabs.push({
+          label: "Administrative Control",
+          labelNo: 4,
+          content: (
+            <AdministrativeControl
+              venueFormData={venueFormData}
+              handleChange={handleChange}
+              handleCheckBox={handleCheckBox}
+              handleDropDownChange={handleDropDownChange}
+            />
+          ),
+        });
+      }
+
+      return defaultTabs;
+    };
 
   const validateFormData = (formData) => {
     const errors = [];

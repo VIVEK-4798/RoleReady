@@ -21,78 +21,60 @@ const app = express();
   
   
     // **Read All Venues**
-    app.get('/get-venue', (req, res) => {
-        const { id } = req.headers;
-        const { page = 1, limit = 10, search = "" } = req.query; 
-    
-        const offset = (page - 1) * limit; 
-        const searchCondition = !lodash.isEmpty(search)
-            ? `AND (venues.venue_name LIKE '%${search}%' OR user.name LIKE '%${search}%' OR user.email LIKE '%${search}%')`
-            : ""; // Build search condition
-    
-        let query = "";
-        let countQuery = "";
-    
-        if (!lodash.isEmpty(id)) {
-            // Query for specific user
-            query = `
-                SELECT * 
-                FROM venues 
-                WHERE user_id = ${id} ${searchCondition} 
-                LIMIT ${limit} OFFSET ${offset};
-            `;
-            countQuery = `
-                SELECT COUNT(*) AS total 
-                FROM venues 
-                WHERE user_id = ${id} ${searchCondition};
-            `;
-        } else {
-            // Query for all users with join
-            query = `
-                SELECT venues.*, user.name AS user_name, user.mobile, user.email 
-                FROM venues 
-                JOIN user ON venues.user_id = user.user_id 
-                WHERE 1=1 ${searchCondition} 
-                LIMIT ${limit} OFFSET ${offset};
-            `;
-            countQuery = `
-                SELECT COUNT(*) AS total 
-                FROM venues 
-                JOIN user ON venues.user_id = user.user_id 
-                WHERE 1=1 ${searchCondition};
-            `;
-        }
-    
-        // First, get the total count
-        db.query(countQuery, (countErr, countResults) => {
-            if (countErr) {
-                console.error('Error fetching count:', countErr);
-                return res.status(500).json({ error: countErr.message });
-            }
-    
-            const totalRecords = countResults[0]?.total || 0; // Get total records
-            const totalPages = Math.ceil(totalRecords / limit); // Calculate total pages
-    
-            // Then, execute the main query
-            db.query(query, (err, results) => {
-                if (err) {
-                    console.error('Error fetching data:', err);
-                    return res.status(500).json({ error: err.message });
-                }
-    
-                // Respond with results, pagination info, and total pages
-                res.json({
-                    results,
-                    success: true,
-                    pagination: {
-                        currentPage: parseInt(page, 10),
-                        limit: parseInt(limit, 10),
-                        totalPages,
-                    },
-                });
-            });
-        });
+app.get('/get-venue', (req, res) => {
+  const { page = 1, limit = 10, search = "" } = req.query;
+
+  const offset = (page - 1) * limit;
+  const searchCondition = !lodash.isEmpty(search)
+    ? `AND (venues.venue_name LIKE '%${search}%' OR user.name LIKE '%${search}%' OR user.email LIKE '%${search}%')`
+    : "";
+
+  // Query for ALL venues, regardless of user role
+  const query = `
+    SELECT venues.*, user.name AS user_name, user.mobile, user.email 
+    FROM venues 
+    JOIN user ON venues.user_id = user.user_id 
+    WHERE 1=1 ${searchCondition} 
+    LIMIT ${limit} OFFSET ${offset};
+  `;
+
+  const countQuery = `
+    SELECT COUNT(*) AS total 
+    FROM venues 
+    JOIN user ON venues.user_id = user.user_id 
+    WHERE 1=1 ${searchCondition};
+  `;
+
+  // Get total count
+  db.query(countQuery, (countErr, countResults) => {
+    if (countErr) {
+      console.error('Error fetching count:', countErr);
+      return res.status(500).json({ error: countErr.message });
+    }
+
+    const totalRecords = countResults[0]?.total || 0;
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    // Get paginated results
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching data:', err);
+        return res.status(500).json({ error: err.message });
+      }
+
+      res.json({
+        results,
+        success: true,
+        pagination: {
+          currentPage: parseInt(page, 10),
+          limit: parseInt(limit, 10),
+          totalPages,
+        },
+      });
     });
+  });
+});
+
   
   app.get('/search-venues', (req, res) => {
     // Extract query parameters for search and pagination
@@ -312,5 +294,64 @@ app.put('/update-status', (req, res) => {
       });
     });
   });
+
+
+  app.get('/get-mentor-venues', (req, res) => {
+  const { user_id } = req.headers;
+  const { page = 1, limit = 10, search = "" } = req.query;
+  
+
+  if (!user_id) {
+    return res.status(400).json({ error: 'Missing user_id in headers' });
+  }
+
+  const offset = (page - 1) * limit;
+  const searchCondition = !lodash.isEmpty(search)
+    ? `AND (venues.venue_name LIKE '%${search}%' OR user.name LIKE '%${search}%' OR user.email LIKE '%${search}%')`
+    : "";
+
+  const query = `
+    SELECT venues.*, user.name AS user_name, user.mobile, user.email 
+    FROM venues 
+    JOIN user ON venues.user_id = user.user_id 
+    WHERE venues.created_by_user_id = ? ${searchCondition} 
+    LIMIT ${limit} OFFSET ${offset};
+  `;
+
+  const countQuery = `
+    SELECT COUNT(*) AS total 
+    FROM venues 
+    JOIN user ON venues.user_id = user.user_id 
+    WHERE venues.user_id = ? ${searchCondition};
+  `;
+
+  db.query(countQuery, [user_id], (countErr, countResults) => {
+    if (countErr) {
+      console.error('Error fetching count:', countErr);
+      return res.status(500).json({ error: countErr.message });
+    }
+
+    const totalRecords = countResults[0]?.total || 0;
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    db.query(query, [user_id], (err, results) => {
+      if (err) {
+        console.error('Error fetching data:', err);
+        return res.status(500).json({ error: err.message });
+      }
+
+      res.json({
+        results,
+        success: true,
+        pagination: {
+          currentPage: parseInt(page, 10),
+          limit: parseInt(limit, 10),
+          totalPages,
+        },
+      });
+    });
+  });
+});
+
 
 module.exports = app;

@@ -8,159 +8,24 @@ const Sidebar = () => {
     navigate("/login");
   }
   const sidebarData = [
-    {
-      icon: "/img/dashboard/sidebar/compass.svg",
-      title: "Marketing",
+        {
+      icon: "/img/dashboard/sidebar/house.svg",
+      title: "Internships",
+      allowedRole: ["mentor", "venue-user"],
       links: [
-        { title: "Overview", href: "overview" },
-        { title: "Google Ads", href: "google_ads" },
-        { title: "Facebook Ads", href: "facebook_ads" },
+        { title: "All Internships", href: "venues", allowedRole: ["mentor", "venue-user"] },
+        { title: "Add Internship", href: "venue/add", allowedRole: ["mentor", "venue-user"] },
       ],
     },
-    // {
-    //   icon: "/img/dashboard/sidebar/gear.svg",
-    //   title: "Manage Website",
-    //   links: [
-    //     { title: "Overview", href: "webpage" },
-    //     { title: "Design", href: "webpage" },
-    //     { title: "SEO", href: "webpage" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/booking.svg",
-    //   title: "SEO",
-    //   links: [
-    //     { title: "All Hotel", href: "#" },
-    //     { title: "Add Hotel", href: "#" },
-    //     { title: "Recovery", href: "#" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/booking.svg",
-    //   title: "VAS",
-    //   links: [
-    //     { title: "All Hotel", href: "#" },
-    //     { title: "Add Hotel", href: "#" },
-    //     { title: "Recovery", href: "#" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/booking.svg",
-    //   title: "Orders/Invoices",
-    //   links: [
-    //     { title: "All Hotel", href: "#" },
-    //     { title: "Add Hotel", href: "#" },
-    //     { title: "Recovery", href: "#" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/booking.svg",
-    //   title: "Gigs",
-    //   links: [
-    //     { title: "All Hotel", href: "#" },
-    //     { title: "Add Hotel", href: "#" },
-    //     { title: "Recovery", href: "#" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/booking.svg",
-    //   title: "Manage Hotel",
-    //   links: [
-    //     { title: "All Hotel", href: "#" },
-    //     { title: "Add Hotel", href: "#" },
-    //     { title: "Recovery", href: "#" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/map.svg",
-    //   title: "Manage Tour",
-    //   links: [
-    //     { title: "All Tour", href: "#" },
-    //     { title: "Add Tour", href: "#" },
-    //     { title: "Recovery", href: "#" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/sneakers.svg",
-    //   title: "Manage Activity",
-    //   links: [
-    //     { title: "All Activity", href: "#" },
-    //     { title: "Add Activity", href: "#" },
-    //     { title: "Recovery", href: "#" },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/house.svg",
-    //   title: "Manage Holiday Rental",
-    //   links: [
-    //     {
-    //       title: "All Holiday Rental",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Add Holiday Rental",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Recovery",
-    //       href: "#",
-    //     },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/taxi.svg",
-    //   title: "Manage Car",
-    //   links: [
-    //     {
-    //       title: "All Car",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Add Car",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Recovery",
-    //       href: "#",
-    //     },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/canoe.svg",
-    //   title: "Manage Cruise",
-    //   links: [
-    //     {
-    //       title: "All Cruise",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Add Cruise",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Recovery",
-    //       href: "#",
-    //     },
-    //   ],
-    // },
-    // {
-    //   icon: "/img/dashboard/sidebar/airplane.svg",
-    //   title: "Manage Flights",
-    //   links: [
-    //     {
-    //       title: "All Flights",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Add Flights",
-    //       href: "#",
-    //     },
-    //     {
-    //       title: "Recovery",
-    //       href: "#",
-    //     },
-    //   ],
-    // },
+    {
+      icon: "/img/dashboard/sidebar/house.svg",
+      title: "Jobs",
+      allowedRole: ["mentor", "vendor-user"],
+      links: [
+        { title: "All Jobs", href: "vendors", allowedRole: ["mentor"] },
+        { title: "Add Job", href: "vendor/add", allowedRole: ["mentor"] },
+      ],
+    },
   ];
 
   return (
@@ -197,7 +62,7 @@ const Sidebar = () => {
 
         {/* <div className="sidebar__item ">
           <a
-            href="/vendor-dashboard/booking"
+            href="/mentor-dashboard/booking"
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
             <img
@@ -205,7 +70,7 @@ const Sidebar = () => {
               alt="image"
               className="mr-15"
             />
-            Bussiness Profile
+            Applicants
           </a>
         </div> */}
         {/* End accordion__item */}
@@ -248,15 +113,15 @@ const Sidebar = () => {
                   className="collapse"
                   data-bs-parent="#vendorSidebarMenu"
                 >
-                  <ul className="list-disc pt-15 pb-5 pl-40">
-                    {item.links.map((link, linkIndex) => (
-                      <li key={linkIndex}>
-                        <a href={link.href} className="text-15">
-                          {link.title}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+                 <ul className="list-disc pt-15 pb-5 pl-40">
+                  {item.links.map((link, linkIndex) => (
+                    <li key={linkIndex}>
+                      <Link to={`/mentor-dashboard/${link.href}`} className="text-15">
+                        {link.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
                 </div>
               </div>
             </div>

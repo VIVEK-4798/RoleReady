@@ -1,61 +1,51 @@
-const ImportantInfo = () => {
+
+const ImportantInfo = ({ jobs }) => {
+  const defaultResponsibilities = [
+    {
+      text: "Collaborate effectively with team members",
+      icon: "bi-people",
+      color: "#3b82f6"
+    },
+    {
+      text: "Demonstrate strong time management skills",
+      icon: "bi-clock",
+      color: "#10b981"
+    },
+    {
+      text: "Maintain professionalism in all tasks",
+      icon: "bi-briefcase",
+      color: "#f59e0b"
+    },
+    {
+      text: "Adapt quickly to project requirements",
+      icon: "bi-arrow-repeat",
+      color: "#8b5cf6"
+    }
+  ];
+
+  const customResponsibilities = jobs?.responsibilities
+    ? jobs.responsibilities.split(',').map((item) => ({
+        text: item.trim(),
+        icon: "bi-check-circle",
+        color: "#ec4899"
+      }))
+    : [];
+
   return (
-    <div className="row x-gap-40 y-gap-40 justify-between pt-20">
-      <div className="col-lg-4 col-md-6">
-        <div className="fw-500 mb-10">Inclusions</div>
-        <ul className="list-disc">
-          <li>Superior Coach, Wi-Fi and USB Charging On-board</li>
-          <li>Expert guide</li>
-          <li>Admission to Windsor Castle (if option selected)</li>
-          <li>Admission to Stonehenge</li>
-        </ul>
-      </div>
-
-      <div className="col-lg-4 col-md-6">
-        <div className="fw-500 mb-10">Departure details</div>
-        <div className="text-15">
-          Departures from 01st April 2022: Tour departs at 8 am (boarding at
-          7.30 am), Victoria Coach Station Gate 1-5
-        </div>
-      </div>
-
-      <div className="col-lg-3 col-md-6">
-        <div className="fw-500 mb-10">Know before you go</div>
-        <ul className="list-disc">
-          <li>Duration: 11h</li>
-          <li>Mobile tickets accepted</li>
-          <li>Instant confirmation</li>
-        </ul>
-      </div>
-
-      <div className="col-lg-4 col-md-6">
-        <div className="fw-500 mb-10">Exclusions</div>
-        <ul className="list-disc">
-          <li>Hotel pick-up and drop-off</li>
-          <li>Gratuities</li>
-          <li>Lunch</li>
-        </ul>
-      </div>
-
-      <div className="col-12">
-        <div className="fw-500 mb-10">Additional information</div>
-        <ul className="list-disc">
-          <li>Confirmation will be received at time of booking</li>
-          <li>
-            Departs at 8am (boarding at 7.30am), Victoria Coach Station Gate
-            1-5, 164 Buckingham Palace Road, London, SW1W 9TP
-          </li>
-          <li>
-            As Windsor Castle is a working royal palace, sometimes the entire
-            Castle or the State Apartments within the Castle need to be closed
-            at short notice. (if selected this option)
-          </li>
-          <li>
-            Stonehenge is closed on 21 June due to the Summer Solstice. During
-            this time, we will instead visit the Avebury Stone Circle.
-          </li>
-          <li>Please note: the tour itinerary and order may change</li>
-        </ul>
+    <div className="responsibilities-container">
+      <h3 className="section-title">Key Responsibilities</h3>
+      <div className="responsibilities-grid">
+        {[...customResponsibilities, ...defaultResponsibilities].map((item, index) => (
+          <div className="responsibility-card" key={index}>
+            <div 
+              className="responsibility-icon"
+              style={{ backgroundColor: `${item.color}20`, color: item.color }}
+            >
+              <i className={`bi ${item.icon}`} />
+            </div>
+            <div className="responsibility-text">{item.text}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

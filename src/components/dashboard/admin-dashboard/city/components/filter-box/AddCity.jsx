@@ -2,7 +2,8 @@ import { useState } from "react";
 import "../../../../../../styles/modals.css";
 import axios from "axios";
 import { api } from "@/utils/apiProvider";
-// import { showAlert } from "@/utils/isTextMatched";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import GalleryUploader from "./GalleryUploader";
 
 const AddCity = ({ refreshCity = () => {} }) => {
@@ -11,7 +12,7 @@ const AddCity = ({ refreshCity = () => {} }) => {
     city_name: "",
     city_address: "",
     city_image: [],
-    is_featured: false, // Added field
+    is_featured: false,
   });
 
   const handleImageUpload = (uploadedImages) => {
@@ -24,34 +25,32 @@ const AddCity = ({ refreshCity = () => {} }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Submitting city data:", cityData);
       const response = await axios.post(
         `${api}/api/city/add-city`,
         { ...cityData, city_image: JSON.stringify(cityData.city_image) }
       );
-      console.log("Response:", response);
+
       if (response.data.success === true) {
-        showAlert("City added successfully.", "success");
+        toast.success("City added successfully.");
         setCityData({
           city_name: "",
           city_address: "",
           city_image: [],
-          is_featured: false, // Reset checkbox
+          is_featured: false,
         });
         setShowModal(false);
         refreshCity();
       } else {
-        showAlert("Something went wrong.", "error");
+        toast.error("Something went wrong.");
       }
     } catch (error) {
       console.error("Error submitting city data:", error);
-      showAlert(error.response?.data?.error || "An error occurred.", "error");
+      toast.error(error.response?.data?.error || "An error occurred.");
     }
   };
 
   return (
     <div className="col-auto">
-      {/* Add City Button */}
       <button
         className="button h-50 px-24 -dark-1 bg-blue-1 text-white"
         onClick={() => setShowModal(true)}
@@ -60,7 +59,6 @@ const AddCity = ({ refreshCity = () => {} }) => {
         <div className="icon-arrow-top-right ml-15"></div>
       </button>
 
-      {/* Add City Modal */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -106,12 +104,12 @@ const AddCity = ({ refreshCity = () => {} }) => {
                     }))
                   }
                   style={{
-                    width: '10%',
-                    padding: '8px',
-                    marginBottom: '15px',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
+                    width: "10%",
+                    padding: "8px",
+                    marginBottom: "15px",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    cursor: "pointer",
                   }}
                 />
               </label>
@@ -137,6 +135,9 @@ const AddCity = ({ refreshCity = () => {} }) => {
           </div>
         </div>
       )}
+
+      {/* Toast Container (only needs to appear once per app, can be removed here if already globally added) */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

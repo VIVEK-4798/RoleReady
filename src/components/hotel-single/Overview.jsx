@@ -3,7 +3,6 @@ const Overview = ({ internship }) => {
     <div className="overview-container">
       <div className="section-header">
         <h3 className="section-title">Overview</h3>
-        <div className="section-divider"></div>
       </div>
 
       <div className="overview-content">

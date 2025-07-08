@@ -22,6 +22,7 @@ const LoginForm = () => {
     }));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -37,6 +38,9 @@ const LoginForm = () => {
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem(`${userRole}Id`, userId);
         localStorage.setItem("role", userRole);
+        if (userRole === "mentor") {
+          localStorage.setItem("mentor-userId", userId);
+        }
         
         sessionStorage.setItem("user", userRole);
 

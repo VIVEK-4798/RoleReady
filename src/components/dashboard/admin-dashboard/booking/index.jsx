@@ -2,88 +2,92 @@ import React from 'react';
 import Sidebar from "../common/Sidebar";
 import Header from "../../../header/dashboard-header";
 import Footer from "../common/Footer";
-// import { useNavigate } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import { api } from "@/utils/apiProvider";
-// import axios from "axios";
-// import {  getHeader, isLoggedInUser } from "@/utils/DOMUtils";
-// import { bookingState, bookingStateArray } from "@/constant/constants";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { api } from "@/utils/apiProvider";
+import axios from "axios";
+import {  getHeader, isLoggedInUser } from "@/utils/DOMUtils";
+import { bookingState, bookingStateArray } from "@/constant/constants";
 import BookingTable from "./components/BookingTable";
 import FilterBox from "./components/filter-box";
 // import { showAlert } from "@/utils/isTextMatched";
-// import DatePicker from "react-multi-date-picker";
-// import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import DatePicker from "react-multi-date-picker";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const index = () => {
 
-    // const navigate = useNavigate();
-    // const [update,setUpdate] = useState(null);
-    // const [data, setData] = useState([]);
-    // const [filterData, setFilterData] = useState([]);
-    // const [showModal, setShowModal] = useState(false);
-    // const [bookingData, setBookingData] = useState({});
-    // const [searchParams, setSearchParams] = useState({ page: 1, limit: 10, search: "", tab : "" }); 
-    // const fetchBookingDetails  = async () => {
-    //   try {
-    //     const response = await axios.get(`${api}/api/booking/get-bookings`, {
-    //       headers : getHeader(),
-    //       params : {
-    //         ...searchParams
-    //       }
-    //     });
-    //     if (response.status === 200) {
-    //       setFilterData(response.data);
-    //       setData(response.data);
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
+    const navigate = useNavigate();
+    const [update,setUpdate] = useState(null);
+    const [data, setData] = useState([]);
+    const [filterData, setFilterData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [bookingData, setBookingData] = useState({});
+    const [searchParams, setSearchParams] = useState({ page: 1, limit: 10, search: "", tab : "" }); 
+    const fetchBookingDetails  = async () => {
+      try {
+        const response = await axios.get(`${api}/api/booking/get-bookings`, {
+          headers : getHeader(),
+          params : {
+            ...searchParams
+          }
+        });
+        console.log(response.data.results);
+        
+        if (response.status === 200) {
+          setFilterData(response.data);
+          setData(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   
-    // const handleSubmit = async (e) => {
-    //   e.preventDefault();
-    //   try {
-    //     await axios.put(`${api}/api/booking/update-booking/${bookingData.booking_id}`,
-    //       {
-    //         ...bookingData,
-    //         booking_dates : bookingData.booking_dates.toString(),
-    //         appointment_date : bookingData.appointment_date.toString()
-    //       });
-    //     showAlert("Booking Updated !!","success");
-    //     setShowModal(false);
-    //     setUpdate(!update);
-    //   } catch (error) {
-    //     showAlert("Something went wrong");
-    //   }
-    // }
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        await axios.put(`${api}/api/booking/update-booking/${bookingData.booking_id}`, {
+          ...bookingData,
+          booking_dates: bookingData.booking_dates.toString(),
+          appointment_date: bookingData.appointment_date.toString(),
+        });
+
+        toast.success("Booking Updated!");
+        setShowModal(false);
+        setUpdate(!update);
+      } catch (error) {
+        toast.error("Something went wrong.");
+      }
+    };
   
-    // const setBookingDates = (values) => {
-    //   setBookingData((prevValue)=>{
-    //     return {
-    //       ...prevValue,
-    //       booking_dates : values
-    //     }
-    //   })
-    // }
+    const setBookingDates = (values) => {
+      setBookingData((prevValue)=>{
+        return {
+          ...prevValue,
+          booking_dates : values
+        }
+      })
+    }
   
-    // const handleChange = (name,value) => {
-    //   setBookingData((prevValue)=>{
-    //     return {
-    //       ...prevValue,
-    //       [name] : value
-    //     }
-    //   })
-    // }
+    const handleChange = (name,value) => {
+      setBookingData((prevValue)=>{
+        return {
+          ...prevValue,
+          [name] : value
+        }
+      })
+    }
   
-    // useEffect(()=>{
-    //   fetchBookingDetails()
-    // },[update, searchParams])
+    useEffect(()=>{
+      fetchBookingDetails()
+    },[update, searchParams])
   
-    // useEffect(()=>{
-    //   if (!isLoggedInUser()) {
-    //     navigate("/");
-    //   }
-    // })
+    useEffect(()=>{
+      if (!isLoggedInUser()) {
+        navigate("/");
+      }
+    })
 
   return (
     <>
@@ -104,24 +108,24 @@ const index = () => {
               <div className="col-auto">
                 <h1 className="text-30 lh-14 fw-600">Booking History</h1>
                 <div className="text-15 text-light-1">
-                See All Venues And Vendors Booking Here.
+                See All Internships And Jobs Applied Here.
                 </div>
               </div>
               {/* End .col-auto */}
 
-              {/* <div className="col-auto">
+               <div className="col-auto">
                 <FilterBox setSearchParams={setSearchParams}/>
-              </div> */}
+              </div> 
             </div>
             {/* End .row */}
 
-            {/* <div className="py-30 px-30 rounded-4 bg-white shadow-3">
+             <div className="py-30 px-30 rounded-4 bg-white shadow-3">
               <BookingTable data={data} setShowModal={setShowModal} setSearchParams={setSearchParams} setBookingData={setBookingData} setUpdate={setUpdate} update={update} tabItems={bookingState()} setFilterData={setFilterData} filterData={filterData}/>
-            </div> */}
-            <div className="py-30 px-30 rounded-4 bg-white shadow-3">
+            </div> 
+            {/* <div className="py-30 px-30 rounded-4 bg-white shadow-3">
               <BookingTable />
-            </div>
-            {/* {showModal && (
+            </div> */}
+             {showModal && (
               <div className="modal-overlay">
                 <div className="modal-content">
                   <h3>Update Booking</h3>
@@ -205,15 +209,11 @@ const index = () => {
                   </form>
                 </div>
               </div>
-            )} */}
+            )} 
             <Footer />
           </div>
-          {/* End .dashboard__content */}
         </div>
-        {/* End dashbaord content */}
-      </div>
-      {/* End dashbaord content */}
-         
+      </div>         
     </>
   )
 }

@@ -1,48 +1,105 @@
-import Social from "../../common/social/Social";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Copyright = () => {
-  return (
-    <div className="row justify-between items-center y-gap-10">
-      <div className="col-auto">
-        <div className="row x-gap-30 y-gap-10">
-          <div className="col-auto">
-            <div className="d-flex items-center">
-            2024 © All Rights Reserved | Cooked with ❤ by Psyber Inc
-            </div>
-          </div>
-          {/* End .col */}
-          <div className="col-auto">
-            <div className="d-flex x-gap-15">
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
-              <a href="#">Site Map</a>
-            </div>
-          </div>
-          {/* End .col */}
-        </div>
-        {/* End .row */}
-      </div>
-      {/* End .col */}
+  const [currentYear] = useState(new Date().getFullYear());
 
-      <div className="col-auto">
-        <div className="row y-gap-10 items-center">
-          <div className="col-auto">
-            <div className="d-flex items-center">
-              <button className="d-flex items-center text-14 fw-500 text-white mr-10">
-                <i className="icon-globe text-16 mr-10" />
-                <span className="underline">English (US)</span>
-              </button>
-              <button className="d-flex items-center text-14 fw-500 text-white mr-10">
-                <i className="icon-usd text-16 mr-10" />
-                <span className="underline">USD</span>
-              </button>
-            </div>
-          </div>
+  return (
+    <div style={{ 
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: '20px',
+      padding: '20px 0',
+      borderTop: '1px solid rgba(255,255,255,0.15)'
+    }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+        <div style={{ 
+          color: 'rgba(255,255,255,0.8)',
+          fontSize: '14px'
+        }}>
+          © {currentYear} All Rights Reserved | Made with ❤️ by Psyber Inc
+        </div>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <a 
+            href="#" 
+            style={{
+              color: 'rgba(255,255,255,0.8)',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+              ':hover': {
+                color: 'white',
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            Privacy
+          </a>
+          <a 
+            href="#" 
+            style={{
+              color: 'rgba(255,255,255,0.8)',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+              ':hover': {
+                color: 'white',
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            Terms
+          </a>
+          <a 
+            href="#" 
+            style={{
+              color: 'rgba(255,255,255,0.8)',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+              ':hover': {
+                color: 'white',
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            Site Map
+          </a>
         </div>
       </div>
-      {/* End .col */}
+
+      <div style={{ display: 'flex', gap: '20px' }}>
+        <button style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: 'none',
+          border: 'none',
+          color: 'rgba(255,255,255,0.8)',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          ':hover': {
+            color: 'white'
+          }
+        }}>
+          <i className="icon-globe" style={{ marginRight: '8px' }} />
+          English (US)
+        </button>
+        <button style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: 'none',
+          border: 'none',
+          color: 'rgba(255,255,255,0.8)',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          ':hover': {
+            color: 'white'
+          }
+        }}>
+          <i className="icon-usd" style={{ marginRight: '8px' }} />
+          USD
+        </button>
+      </div>
     </div>
   );
 };
-
 export default Copyright;

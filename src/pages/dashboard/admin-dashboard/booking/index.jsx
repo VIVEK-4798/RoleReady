@@ -4,8 +4,8 @@ import DashboardPage from "../../../../components/dashboard/admin-dashboard/book
 import MetaComponent from "@/components/common/MetaComponent";
 
 const metadata = {
-  title: "Admin History | Pets24x7 - Your One-Stop Pet Shop Directory.",
-  description: "Pets24x7 - Your One-Stop Pet Shop Directory.",
+  title: "Admin History | Startups24x7 - All-in-One Platform for Startup Services",
+  description: "Startups24x7 - All-in-One Platform for Startup Services",
 };
 
 export default function AdminBooking() {

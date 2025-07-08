@@ -1,9 +1,12 @@
-import Sidebar from "../common/Sidebar";
+import Sidebar from "../../mentor-dashboard/common/Sidebar";
 import Header from "../../../header/dashboard-header";
 import SettingsTabs from "./components/index";
 import Footer from "../common/Footer";
+import { useParams } from "react-router-dom";
 
 const index = () => {
+  let params = useParams();
+  const mode = params.mode;
   return (
     <>
       {/*  */}
@@ -25,9 +28,9 @@ const index = () => {
           <div className="dashboard__content bg-light-2">
             <div className="row y-gap-20 justify-between items-end pb-60 lg:pb-40 md:pb-32">
               <div className="col-12">
-                <h1 className="text-30 lh-14 fw-600">Settings</h1>
+                <h1 className="text-30 lh-14 fw-600">{mode === "add" ? "Create" : "Update"} Internship Profile</h1>
                 <div className="text-15 text-light-1">
-                  Lorem ipsum dolor sit amet, consectetur.
+                  Seamlessly add your venue or destination to our platform.
                 </div>
               </div>
               {/* End .col-12 */}

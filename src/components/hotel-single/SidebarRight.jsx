@@ -1,41 +1,77 @@
-import FilterBox from "../../components/hotel-single/filter-box";
+import { useState } from "react";
+import ApplyNowModal from "./ApplyNowModal";
 
 const SidebarRight = ({ internship }) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <aside className="ml-50 lg:ml-0">
-      <div className="px-30 py-30 border-light rounded-4 shadow-4">
-        <div style={{ display: 'flex',flexDirection:"column", justifyContent: 'space-between' }}>
-          {/* Stipend Section */}
-          <div className="mb-20">
-            <span className="text-20 fw-500">Stipend: ₹{internship?.stipend}</span>
-            <span className="text-14 text-light-1 ml-5">per month</span>
+    <>
+      <aside className="sidebar-right">
+        <div className="sidebar-card">
+          <div className="internship-details">
+            {/* Stipend Section */}
+            <div className="detail-section stipend-section">
+              <div className="detail-icon">
+                <i className="bi bi-cash-stack"></i>
+              </div>
+              <div className="detail-content">
+                <span className="detail-value">₹{internship?.stipend || 'Negotiable'}</span>
+                <span className="detail-label">Monthly Stipend</span>
+              </div>
+            </div>
+
+            {/* Internship Type */}
+            <div className="detail-section">
+              <div className="detail-icon">
+                <i className="bi bi-briefcase"></i>
+              </div>
+              <div className="detail-content">
+                <span className="detail-label">Internship Type</span>
+                <span className="detail-value">{internship?.internship_type || 'Not specified'}</span>
+              </div>
+            </div>
+
+            {/* Duration */}
+            <div className="detail-section">
+              <div className="detail-icon">
+                <i className="bi bi-calendar"></i>
+              </div>
+              <div className="detail-content">
+                <span className="detail-label">Duration</span>
+                <span className="detail-value">
+                  {internship?.duration_months || 'N/A'} month
+                  {internship?.duration_months !== 1 ? 's' : ''}
+                </span>
+              </div>
+            </div>
+
+            {/* Work Detail */}
+            <div className="detail-section">
+              <div className="detail-icon">
+                <i className="bi bi-clipboard-check"></i>
+              </div>
+              <div className="detail-content">
+                <span className="detail-label">Work Detail</span>
+                <span className="detail-value">{internship?.work_detail || 'Flexible'}</span>
+              </div>
+            </div>
           </div>
 
-          {/* Internship Type */}
-          <div className="mb-20">
-            <div className="lh-15 fw-500">Internship Type: {internship?.internship_type}</div>
-          </div>
-
-          {/* Duration */}
-          <div className="mb-20">
-            <div className="lh-15 text-light-1">Duration: {internship?.duration_months} months</div>
-          </div>
-
-          {/* Work Detail */}
-          <div>
-            <div className="lh-15 text-light-1">Work Detail: {internship?.work_detail}</div>
-          </div>
-
+          <button className="button h-50 px-24 -dark-1 bg-blue-1 text-white" onClick={() => setShowModal(true)}>
+            Apply Now <i className="icon-arrow-right"></i>
+          </button>
         </div>
-        {/* End d-flex */}
+      </aside>
 
-        {/* FilterBox */}
-        <div className="row y-gap-20 ">
-          <FilterBox />
-        </div>
-      </div>
-      {/* End px-30 FilterBox */}
-    </aside>
+      {/* Apply Now Modal */}
+            <ApplyNowModal
+        internship={internship}
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        type="venue"
+        venueId={internship.venue_id}
+      />
+    </>
   );
 };
 

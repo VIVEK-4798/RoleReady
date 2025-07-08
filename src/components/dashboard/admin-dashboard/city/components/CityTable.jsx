@@ -5,6 +5,9 @@ import ActionsButton from "./ActionsButton";
 import { api } from "@/utils/apiProvider";
 // import { showAlert } from "@/utils/isTextMatched";
 import GalleryUploader from "./filter-box/GalleryUploader";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const CityTable = ({ searchParameter, refresh }) => {
   const [cities, setCities] = useState([]);
@@ -77,12 +80,12 @@ const CityTable = ({ searchParameter, refresh }) => {
 
       await axios.put(`${api}/api/city/update-city/${cityData.city_id}`, {...cityData, city_image:JSON.stringify(cityData.city_image)});
 
-      showAlert("City updated successfully.", "success");
+      toast.success("City updated successfully.");
       setShowModal(false);
       fetchCities(); // Refresh cities list
     } catch (error) {
       console.error("Error updating city:", error);
-      showAlert(error.response?.data?.error || "An error occurred.", "error");
+      toast.error(error.response?.data?.error || "An error occurred.");
     }
   };
 
@@ -90,11 +93,11 @@ const CityTable = ({ searchParameter, refresh }) => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${api}/api/city/delete-city/${id}`);
-      showAlert("City deleted successfully.", "success");
+      toast.success("City deleted successfully.");
       fetchCities(); // Refresh cities list
     } catch (error) {
       console.error("Error deleting city:", error);
-      showAlert(error.response?.data?.error || "An error occurred.", "error");
+      toast.error(error.response?.data?.error || "An error occurred.");
     }
   };
 

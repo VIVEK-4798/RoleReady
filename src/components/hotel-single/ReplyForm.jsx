@@ -1,41 +1,59 @@
 const ReplyForm = () => {
   return (
-    <form className="row y-gap-30 pt-20">
-      <div className="col-xl-6">
-        <div className="form-input ">
-          <input type="text" required />
-          <label className="lh-1 text-16 text-light-1">Text</label>
+    <form className="reply-form">
+      <div className="form-grid">
+        {/* Name Field */}
+        <div className="form-group">
+          <div className="floating-input">
+            <input 
+              type="text" 
+              id="name" 
+              className="form-input" 
+              required 
+            />
+            <label htmlFor="name" className="floating-label">Your Name</label>
+            <div className="focus-border"></div>
+          </div>
+        </div>
+
+        {/* Email Field */}
+        <div className="form-group">
+          <div className="floating-input">
+            <input 
+              type="email" 
+              id="email" 
+              className="form-input" 
+              required 
+            />
+            <label htmlFor="email" className="floating-label">Email Address</label>
+            <div className="focus-border"></div>
+          </div>
+        </div>
+
+        {/* Comment Field */}
+        <div className="form-group full-width">
+          <div className="floating-input">
+            <textarea 
+              id="comment" 
+              className="form-input" 
+              rows={4} 
+              required 
+            />
+            <label htmlFor="comment" className="floating-label">Your Comment</label>
+            <div className="focus-border"></div>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <div className="form-submit">
+          <button type="submit" className="submit-button">
+            <span>Post Comment</span>
+            <svg className="arrow-icon" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
-      {/* End .col */}
-
-      <div className="col-xl-6">
-        <div className="form-input ">
-          <input type="text" required />
-          <label className="lh-1 text-16 text-light-1">Email</label>
-        </div>
-      </div>
-      {/* End .col */}
-
-      <div className="col-12">
-        <div className="form-input ">
-          <textarea required rows={4} defaultValue={""} />
-          <label className="lh-1 text-16 text-light-1">
-            Write Your Comment
-          </label>
-        </div>
-      </div>
-      {/* End .col */}
-
-      <div className="col-auto">
-        <button
-          type="submit"
-          className="button -md -dark-1 bg-blue-1 text-white"
-        >
-          Post Comment <div className="icon-arrow-top-right ml-15" />
-        </button>
-      </div>
-      {/* End .col */}
     </form>
   );
 };

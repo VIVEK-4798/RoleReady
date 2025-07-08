@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-const GalleryUploader = () => {
-  const [images, setImages] = useState([]);
+const GalleryUploader = ({venueFormData, setVenueFormData}) => {
+  // const [venueFormData.venue_images, setVenueFormData] = useState([]);
   const [error, setError] = useState("");
 
   const handleFileUpload = (event) => {
     const fileList = event.target.files;
     const newImages = [];
-    const maxSize = 800; // in pixels
+    const maxSize = 1800; // in pixels
 
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList[i];
@@ -29,7 +29,10 @@ const GalleryUploader = () => {
           } else {
             newImages.push(reader.result);
             if (newImages.length === fileList.length) {
-              setImages([...images, ...newImages]);
+              setVenueFormData((prevState) => ({
+                ...prevState,
+                venue_images: [...venueFormData?.venue_images, ...newImages],
+              }));
               setError("");
             }
           }
@@ -45,9 +48,12 @@ const GalleryUploader = () => {
   };
 
   const handleRemoveImage = (index) => {
-    const newImages = [...images];
+    const newImages = [...venueFormData?.venue_images];
     newImages.splice(index, 1);
-    setImages(newImages);
+    setVenueFormData((prevState) => ({
+      ...prevState,
+      venue_images: newImages,
+    }));
   };
 
   return (
@@ -75,7 +81,7 @@ const GalleryUploader = () => {
       </div>
       {/* End uploader field */}
 
-      {images.map((image, index) => (
+      {venueFormData?.venue_images.length !== 0 && venueFormData?.venue_images.map((image, index) => (
         <div className="col-auto" key={index}>
           <div className="d-flex ratio ratio-1:1 w-200">
             <img src={image} alt="image" className="img-ratio rounded-4" />

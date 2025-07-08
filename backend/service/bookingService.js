@@ -1,159 +1,198 @@
-
 const express = require('express');
 require('dotenv').config();
 const db = require("../db");
-const bcrypt = require('bcrypt');
 const sendEmail = require('../Utils/SendEmail');
-const app = express();
+const multer = require('multer');
+const path = require('path');
 
-app.post("/create-booking", (req, res) => {
-  const { user_id, venue_id, vendor_id, type, status, booking_dates, appointment_date } = req.body;
+const app = express.Router();
+
+// Storage setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/resumes/'),
+  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+});
+
+const upload = multer({ storage });
+
+// Safe parse helper
+const safeParseInt = (value) => {
+  if (!value || isNaN(parseInt(value))) return null;
+  return parseInt(value);
+};
+
+app.post("/create-booking", upload.single('resume'), (req, res) => {
+  const {
+    user_id,
+    venue_id,
+    service_reg_id, // <--- renamed
+    type,
+    status,
+    booking_dates,
+    appointment_date,
+    name,
+    phone
+  } = req.body;
+
+  const parsedUserId = safeParseInt(user_id);
+  const parsedVenueId = safeParseInt(venue_id);
+  const parsedServiceRegId = safeParseInt(service_reg_id); // <--- new name
+  const parsedBookingDates = Array.isArray(booking_dates)
+    ? booking_dates
+    : JSON.parse(booking_dates || "[]");
+
+  const resume_file = req.file ? `/uploads/resumes/${req.file.filename}` : null;
+
   const query = `
-    INSERT INTO bookings (user_id, venue_id, vendor_id, type, status, booking_dates, appointment_date)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO bookings
+    (user_id, venue_id, vendor_id, type, status, booking_dates, appointment_date, applicant_name, applicant_phone, resume_file)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     query,
-    [user_id, venue_id, vendor_id, type, status, JSON.stringify(booking_dates), appointment_date],
+    [
+      parsedUserId,
+      parsedVenueId,
+      parsedServiceRegId, // still inserting into vendor_id column
+      type,
+      status,
+      JSON.stringify(parsedBookingDates),
+      appointment_date,
+      name,
+      phone,
+      resume_file
+    ],
     (err, result) => {
       if (err) {
         console.error("Error creating booking:", err);
         return res.status(500).send("Failed to create booking.");
       }
-      sendBookingEnqueryMail(user_id, venue_id, vendor_id, type, status, JSON.stringify(booking_dates), appointment_date);
+
+      sendEmail(parsedUserId, parsedVenueId, parsedServiceRegId, type, status, parsedBookingDates, appointment_date);
       res.status(201).json({ message: "Booking created successfully!", bookingId: result.insertId });
     }
   );
 });
 
+
 // 2. Read All Bookings
 app.get("/get-bookings", (req, res) => {
-  const { user_id, venue_id, vendor_id } = req.headers; // Get filters from headers
-  const { page = 1, limit = 10, search = "", tab = "" } = req.query; // Pagination and search parameters
+  const { user_id, venue_id, vendor_id } = req.headers;
+  const { page = 1, limit = 10, search = "", tab = "" } = req.query;
 
-  // Calculate pagination offset
   const offset = (page - 1) * limit;
+  const params = [];
 
-  // Base query with JOINs
   let query = `
     SELECT 
-      bookings.*, 
-      user.name AS user_name, 
-      user.email AS user_email,
-      user.mobile AS user_mobile,
-      venues.venue_name AS venue_name,
-      venues.user_id AS venue_owner_id,
-      venues.venue_phone_no AS venue_phone_no,
-      vendors.vendor_name AS vendor_name,
-      vendors.vendor_service AS vendor_service,
-      vendors.contact_number AS contact_number
+      bookings.booking_id,
+      bookings.user_id,
+      bookings.venue_id,
+      bookings.vendor_id,
+      bookings.type,
+      bookings.status,
+      bookings.booking_dates,
+      bookings.appointment_date,
+      bookings.created_at,
+      bookings.updated_at,
+      bookings.applicant_name,
+      bookings.applicant_phone,
+      bookings.resume_file,
+
+      venues.venue_name,
+      venues.venue_address,
+
+      vendors.vendor_name,
+      vendors.vendor_address
+
     FROM bookings
-    INNER JOIN user ON bookings.user_id = user.user_id
-    LEFT JOIN venues ON bookings.venue_id = venues.venue_id
-    LEFT JOIN vendors ON bookings.vendor_id = vendors.service_reg_id
-    WHERE 1=1
+    LEFT JOIN venues ON bookings.venue_id IS NOT NULL AND bookings.venue_id = venues.venue_id
+    LEFT JOIN vendors ON bookings.vendor_id IS NOT NULL AND bookings.vendor_id = vendors.service_reg_id
+    WHERE 1 = 1
   `;
 
-  // Add conditions based on the provided filters
-  const params = [];
+  // Filters
   if (user_id) {
     query += " AND bookings.user_id = ?";
     params.push(user_id);
   }
   if (venue_id) {
-    query += " AND venues.user_id = ?";
+    query += " AND bookings.venue_id = ?";
     params.push(venue_id);
   }
   if (vendor_id) {
-    query += " AND vendors.user_id = ?";
+    query += " AND bookings.vendor_id = ?";
     params.push(vendor_id);
   }
   if (tab) {
     query += " AND bookings.status = ?";
     params.push(tab);
   }
-
-  // Add search functionality
   if (search) {
+    const pat = `%${search}%`;
     query += `
       AND (
-        user.name LIKE ? OR 
-        user.email LIKE ? OR 
-        venues.venue_name LIKE ? OR 
-        vendors.vendor_name LIKE ?
+        bookings.applicant_name LIKE ? OR
+        bookings.applicant_phone LIKE ?
       )
     `;
-    const searchPattern = `%${search}%`;
-    params.push(searchPattern, searchPattern, searchPattern, searchPattern);
+    params.push(pat, pat);
   }
 
-  // Ensure only rows with valid venue or vendor are returned
-  query += " AND (bookings.venue_id IS NOT NULL OR bookings.vendor_id IS NOT NULL)";
-
-  // Add sorting by created_at
-  query += " ORDER BY bookings.created_at DESC";
-
-  // Add pagination
-  query += " LIMIT ? OFFSET ?";
+  query += " ORDER BY bookings.created_at DESC LIMIT ? OFFSET ?";
   params.push(parseInt(limit, 10), offset);
 
-  // Query to get the total count
-  let countQuery = `
-    SELECT COUNT(*) AS total
-    FROM bookings
-    INNER JOIN user ON bookings.user_id = user.user_id
-    LEFT JOIN venues ON bookings.venue_id = venues.venue_id
-    LEFT JOIN vendors ON bookings.vendor_id = vendors.service_reg_id
-    WHERE 1=1
-  `;
+  // Count query (same filters, no joins)
+  let countQuery = `SELECT COUNT(*) AS total FROM bookings WHERE 1=1`;
+  const countParams = [];
 
-  // Add the same filters to the count query
   if (user_id) {
-    countQuery += " AND bookings.user_id = ?";
+    countQuery += " AND user_id = ?";
+    countParams.push(user_id);
   }
   if (venue_id) {
-    countQuery += " AND venues.user_id = ?";
+    countQuery += " AND venue_id = ?";
+    countParams.push(venue_id);
   }
   if (vendor_id) {
-    countQuery += " AND vendors.user_id = ?";
+    countQuery += " AND vendor_id = ?";
+    countParams.push(vendor_id);
   }
   if (tab) {
-    countQuery += " AND bookings.status = ?";
+    countQuery += " AND status = ?";
+    countParams.push(tab);
   }
   if (search) {
+    const pat = `%${search}%`;
     countQuery += `
       AND (
-        user.name LIKE ? OR 
-        user.email LIKE ? OR 
-        venues.venue_name LIKE ? OR 
-        vendors.vendor_name LIKE ?
+        applicant_name LIKE ? OR
+        applicant_phone LIKE ?
       )
     `;
+    countParams.push(pat, pat);
   }
-  countQuery += " AND (bookings.venue_id IS NOT NULL OR bookings.vendor_id IS NOT NULL)";
 
-  // Execute the count query first
-  db.query(countQuery, params.slice(0, params.length - 2), (countErr, countResults) => {
+  // Execute count first
+  db.query(countQuery, countParams, (countErr, countRes) => {
     if (countErr) {
-      console.error("Error fetching booking count:", countErr);
-      return res.status(500).json({ error: "Failed to fetch booking count." });
+      console.error("Error counting bookings:", countErr);
+      return res.status(500).json({ error: "Failed to count bookings." });
     }
 
-    const totalRecords = countResults[0]?.total || 0; // Get the total records
-    const totalPages = Math.ceil(totalRecords / limit); // Calculate total pages
+    const totalRecords = countRes[0]?.total || 0;
+    const totalPages = Math.ceil(totalRecords / limit);
 
-    // Execute the main query
     db.query(query, params, (err, results) => {
       if (err) {
         console.error("Error fetching bookings:", err);
         return res.status(500).json({ error: "Failed to fetch bookings." });
       }
 
-      // Respond with results, pagination info, and total pages
       res.json({
-        results,
         success: true,
+        results,
         pagination: {
           currentPage: parseInt(page, 10),
           limit: parseInt(limit, 10),
@@ -163,8 +202,6 @@ app.get("/get-bookings", (req, res) => {
     });
   });
 });
-
-
 
 
 // 3. Read a Single Booking by ID
