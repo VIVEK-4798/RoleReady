@@ -66,12 +66,11 @@ const Sidebar = () => {
         </div> */}
         {/* End accordion__item */}
 
-        <div className="sidebar__item ">
+        {/* <div className="sidebar__item ">
           <a
             href="/vendor-dashboard/webpage"
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
-            {/* <i class="bi bi-instagram mr-10 text-20 text-primary"></i> */}
             <img
               src="/img/dashboard/sidebar/gear.svg"
               className="h-auto w-auto mr-10 "
@@ -80,9 +79,9 @@ const Sidebar = () => {
             />
             Manage Webpage
           </a>
-        </div>
+        </div> */}
 
-        {sidebarData.map((item, index) => (
+        {/* {sidebarData.map((item, index) => (
           <div className="sidebar__item" key={index}>
             <div className="accordion -db-sidebar js-accordion">
               <div className="accordion__item">
@@ -117,14 +116,13 @@ const Sidebar = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
 
-        <div className="sidebar__item ">
+        {/* <div className="sidebar__item ">
           <a
             href="/vendor-dashboard/instagram"
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
-            {/* <i class="bi bi-instagram mr-10 text-20 text-primary"></i> */}
             <img
               src="/img/dashboard/icons/instagram.svg"
               className="h-auto w-auto mr-10 "
@@ -140,7 +138,6 @@ const Sidebar = () => {
             href="/vendor-dashboard/facebook"
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
-            {/* <i class="bi bi-facebook mr-10 text-20 text-primary"></i> */}
             <img
               src="/img/dashboard/icons/facebook.svg"
               className="h-auto w-auto mr-10 "
@@ -149,7 +146,7 @@ const Sidebar = () => {
             />
             Facebook
           </a>
-        </div>
+        </div> */}
 
         <div className="sidebar__item ">
           <a

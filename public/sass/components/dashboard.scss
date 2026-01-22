@@ -286,3 +286,151 @@ body.-is-sidebar-open {
 .tabs.-underline-2 .tabs__controls .tabs__button.is-tab-el-active:after {
   opacity: 1;
 }
+
+
+//  readiness dashboard overrides
+
+/* dashboard-readiness.css */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #5693C1 0%, #4a80b0 100%);
+}
+
+.bg-light-blue {
+  background-color: rgba(86, 147, 193, 0.1);
+}
+
+.bg-light-green {
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.bg-light-red {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.bg-light-purple {
+  background-color: rgba(139, 92, 246, 0.1);
+}
+
+.bg-light-gray {
+  background-color: rgba(100, 116, 139, 0.1);
+}
+
+.bg-success-50 {
+  background-color: rgba(16, 185, 129, 0.05);
+}
+
+.border-success-100 {
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.text-success-800 {
+  color: #065f46;
+}
+
+.text-success-600 {
+  color: #059669;
+}
+
+.bg-warning-50 {
+  background-color: rgba(245, 158, 11, 0.05);
+}
+
+.border-warning-100 {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.text-warning-800 {
+  color: #92400e;
+}
+
+.text-warning-600 {
+  color: #d97706;
+}
+
+.bg-light-blue-50 {
+  background-color: rgba(86, 147, 193, 0.05);
+}
+
+.bg-light-green-50 {
+  background-color: rgba(16, 185, 129, 0.05);
+}
+
+.bg-light-purple-50 {
+  background-color: rgba(139, 92, 246, 0.05);
+}
+
+.bg-light-red-50 {
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.trend-indicator.up {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+}
+
+.trend-indicator.down {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #7f1d1d;
+}
+
+.trend-indicator.stable {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #475569;
+}
+
+.progress-bar {
+  transition: width 0.6s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(86, 147, 193, 0.05);
+}
+
+.badge.bg-primary {
+  background-color: #5693C1 !important;
+}
+
+.btn-primary {
+  background-color: #5693C1;
+  border-color: #5693C1;
+}
+
+.btn-primary:hover {
+  background-color: #4a80b0;
+  border-color: #4a80b0;
+}
+
+.btn-outline-primary {
+  color: #5693C1;
+  border-color: #5693C1;
+}
+
+.btn-outline-primary:hover {
+  background-color: #5693C1;
+  color: white;
+}
+
+/* Tooltip hover effect */
+.position-relative .tooltip {
+  pointer-events: none;
+}
+
+.position-relative:hover .tooltip {
+  opacity: 1 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .text-48 {
+    font-size: 2.5rem !important;
+  }
+  
+  .text-32 {
+    font-size: 1.75rem !important;
+  }
+  
+  .tab-btn {
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+  }
+}
