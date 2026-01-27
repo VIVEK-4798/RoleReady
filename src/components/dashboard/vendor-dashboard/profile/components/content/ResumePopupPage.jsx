@@ -1,18 +1,43 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faFileAlt, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { api } from "@/utils/apiProvider";
+import SkillSuggestionsReview from "./SkillSuggestionsReview";
+
+/* ============================================================================
+   📄 STEP 2 & 4: Resume Upload Component with Skill Suggestions
+   ============================================================================
+   
+   Changes:
+   - Now shows "Resume uploaded on [date]"
+   - Uses new resumes table via updated endpoints
+   - Displays file name and upload status
+   - STEP 4: Integrated SkillSuggestionsReview component
+   - STEP 5: Added recalculate readiness navigation
+   ============================================================================ */
 
 const ResumePopupPage = () => {
+  const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [showResumeTips, setShowResumeTips] = useState(false);
   const [resumeFile, setResumeFile] = useState(null);
-  const [savedResumeName, setSavedResumeName] = useState("");
+  const [resumeInfo, setResumeInfo] = useState({
+    resume_name: "",
+    uploaded_at: null,
+    has_resume: false
+  });
+  const [isUploading, setIsUploading] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const user_id = user?.user_id;
+
+  // STEP 5: Handle recalculate readiness navigation
+  const handleRecalculateReadiness = () => {
+    navigate("/dashboard/readiness", { state: { recalculate: true } });
+  };
 
   useEffect(() => {
     if (showPopup || showResumeTips) {
@@ -31,13 +56,28 @@ const ResumePopupPage = () => {
 
   const fetchResume = async () => {
     try {
-      const res = await axios.get(`${api}/api/profile/get-resume/${user_id}?role=user`);
-      if (res.data.resume_name) {
-        setSavedResumeName(res.data.resume_name);
-      }
+      const res = await axios.get(`${api}/api/profile/get-resume/${user_id}`);
+      setResumeInfo({
+        resume_name: res.data.resume_name || "",
+        uploaded_at: res.data.uploaded_at || null,
+        has_resume: res.data.has_resume || false
+      });
     } catch (err) {
       console.error("Error fetching resume:", err.message);
     }
+  };
+
+  // Format date for display
+  const formatUploadDate = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const handleOverlayClick = (e) => {
@@ -50,9 +90,6 @@ const ResumePopupPage = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setResumeFile(file);
-    if (file) {
-      setSavedResumeName(file.name);
-    }
   };
 
   const handleSave = async () => {
@@ -61,17 +98,22 @@ const ResumePopupPage = () => {
       return;
     }
 
+    setIsUploading(true);
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("resume", resumeFile);
     formData.append("role", "user"); 
 
-
     try {
       const res = await axios.post(`${api}/api/profile/upload-resume`, formData);
       if (res.data.success) {
         toast.success("Resume uploaded successfully");
-        setSavedResumeName(resumeFile.name);
+        // Update resume info with response data
+        setResumeInfo({
+          resume_name: res.data.file_name || resumeFile.name,
+          uploaded_at: res.data.uploaded_at || new Date().toISOString(),
+          has_resume: true
+        });
         setResumeFile(null);
         setShowPopup(false);
       } else {
@@ -79,6 +121,8 @@ const ResumePopupPage = () => {
       }
     } catch (err) {
       toast.error("Server error");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -96,23 +140,96 @@ const ResumePopupPage = () => {
             <p className="text-16 text-light-1 mb-10">
               Add your Resume & get your profile filled in a click!
             </p>
-            {savedResumeName ? (
-              <span>
-                <FontAwesomeIcon
-                  icon={faPenToSquare}
+            
+            {/* STEP 2: Show resume status with upload date */}
+            {resumeInfo.has_resume ? (
+              <div className="resume-status">
+                {/* Success indicator */}
+                <div style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: "0.5rem",
+                  marginBottom: "0.5rem"
+                }}>
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    style={{ color: "#10B981" }}
+                  />
+                  <span style={{ color: "#10B981", fontWeight: 500 }}>
+                    Resume uploaded
+                  </span>
+                </div>
+                
+                {/* File name */}
+                <div style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: "0.5rem",
+                  marginBottom: "0.25rem",
+                  color: "#374151",
+                  fontSize: "0.9rem"
+                }}>
+                  <FontAwesomeIcon icon={faFileAlt} style={{ color: "#6366f1" }} />
+                  <span>{resumeInfo.resume_name}</span>
+                </div>
+                
+                {/* Upload date */}
+                {resumeInfo.uploaded_at && (
+                  <p style={{ 
+                    fontSize: "0.8rem", 
+                    color: "#9CA3AF", 
+                    marginBottom: "0.75rem",
+                    marginLeft: "1.25rem"
+                  }}>
+                    Uploaded on {formatUploadDate(resumeInfo.uploaded_at)}
+                  </p>
+                )}
+                
+                {/* Edit button */}
+                <button
                   onClick={openEditPopup}
-                  className="text-blue-500 cursor-pointer hover:opacity-80"
-                  size="lg"
-                />
-              </span>
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.375rem",
+                    backgroundColor: "#f3f4f6",
+                    color: "#374151",
+                    padding: "0.375rem 0.75rem",
+                    borderRadius: "0.375rem",
+                    fontSize: "0.8rem",
+                    border: "1px solid #e5e7eb",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s"
+                  }}
+                  onMouseOver={(e) => e.target.style.backgroundColor = "#e5e7eb"}
+                  onMouseOut={(e) => e.target.style.backgroundColor = "#f3f4f6"}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} size="sm" />
+                  Replace Resume
+                </button>
+              </div>
             ) : (
-              <span
+              <button
                 onClick={() => setShowPopup(true)}
-                className="text-blue-1"
-                style={{ textDecoration: "underline", cursor: "pointer" }}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  backgroundColor: "#4F46E5",
+                  color: "white",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "0.375rem",
+                  fontSize: "0.875rem",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background-color 0.2s"
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = "#4338CA"}
+                onMouseOut={(e) => e.target.style.backgroundColor = "#4F46E5"}
               >
+                <FontAwesomeIcon icon={faFileAlt} />
                 Upload Resume
-              </span>
+              </button>
             )}
           </div>
           <img
@@ -123,26 +240,73 @@ const ResumePopupPage = () => {
         </div>
       </div>
 
+      {/* STEP 4 & 5: Skill Suggestions Review with Readiness Recalculation */}
+      {resumeInfo.has_resume && (
+        <div style={{ marginTop: "1rem" }}>
+          <SkillSuggestionsReview 
+            onSkillsAdded={(count) => {
+              // Toast handled in component now
+            }}
+            onRecalculateReadiness={handleRecalculateReadiness}
+          />
+        </div>
+      )}
+
       {/* Upload Popup */}
       {showPopup && (
         <div className="popup-main overlay" onClick={handleOverlayClick}>
           <div className="popup-second">
             <h3 style={{ fontSize: "1.125rem", fontWeight: 600, marginBottom: "0.5rem" }}>
-              Resume <span style={{ color: "red" }}>*</span>
+              {resumeInfo.has_resume ? "Replace Resume" : "Upload Resume"}
             </h3>
             <p style={{ fontSize: "0.875rem", color: "#6B7280", marginBottom: "1rem" }}>
               Upload a one-pager that highlights your skills, experience, and accomplishments.
             </p>
 
             {/* Preview previously uploaded resume */}
-            {savedResumeName && !resumeFile && (
-              <div style={{ marginBottom: "1rem", color: "#4B5563", fontSize: "0.875rem" }}>
-                <strong>Current Resume:</strong> {savedResumeName}
+            {resumeInfo.has_resume && !resumeFile && (
+              <div style={{ 
+                marginBottom: "1rem", 
+                padding: "0.75rem",
+                backgroundColor: "#f9fafb",
+                borderRadius: "0.375rem",
+                border: "1px solid #e5e7eb"
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#374151", fontSize: "0.875rem" }}>
+                  <FontAwesomeIcon icon={faFileAlt} style={{ color: "#6366f1" }} />
+                  <strong>Current:</strong> {resumeInfo.resume_name}
+                </div>
+                {resumeInfo.uploaded_at && (
+                  <p style={{ fontSize: "0.75rem", color: "#9CA3AF", marginTop: "0.25rem", marginLeft: "1.25rem" }}>
+                    Uploaded {formatUploadDate(resumeInfo.uploaded_at)}
+                  </p>
+                )}
               </div>
             )}
 
             {/* New file input */}
-            <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} />
+            <div style={{ marginBottom: "1rem" }}>
+              <label style={{ 
+                display: "block", 
+                fontSize: "0.8rem", 
+                color: "#374151", 
+                marginBottom: "0.5rem",
+                fontWeight: 500
+              }}>
+                {resumeInfo.has_resume ? "Select new resume file:" : "Select resume file:"}
+              </label>
+              <input 
+                type="file" 
+                accept=".pdf,.doc,.docx" 
+                onChange={handleFileChange}
+                style={{ fontSize: "0.875rem" }}
+              />
+              {resumeFile && (
+                <p style={{ fontSize: "0.8rem", color: "#10B981", marginTop: "0.5rem" }}>
+                  ✓ Selected: {resumeFile.name}
+                </p>
+              )}
+            </div>
 
             {/* Resume Tips Button */}
             <button
@@ -170,9 +334,25 @@ const ResumePopupPage = () => {
             </button>
 
             {/* Action Buttons */}
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5rem" }}>
-              <button onClick={() => setShowPopup(false)} className="cancel-button">Cancel</button>
-              <button onClick={handleSave} className="save-button">Save</button>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5rem", gap: "0.75rem" }}>
+              <button 
+                onClick={() => setShowPopup(false)} 
+                className="cancel-button"
+                disabled={isUploading}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSave} 
+                className="save-button"
+                disabled={isUploading || !resumeFile}
+                style={{
+                  opacity: (isUploading || !resumeFile) ? 0.6 : 1,
+                  cursor: (isUploading || !resumeFile) ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {isUploading ? "Uploading..." : (resumeInfo.has_resume ? "Replace" : "Upload")}
+              </button>
             </div>
           </div>
         </div>

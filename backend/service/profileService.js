@@ -182,22 +182,41 @@ router.post('/save-about', (req, res) => {
 });
 
 
-// GET Resume info
+/* ============================================================================
+   📄 STEP 2: Resume Endpoints (using dedicated resumes table)
+   ============================================================================
+   
+   These endpoints now use the `resumes` table instead of profile_info.
+   This provides:
+   - Upload timestamp tracking
+   - Support for parsed_text storage (future)
+   - Better data separation
+   ============================================================================ */
+
+// GET Resume info (from resumes table)
 router.get('/get-resume/:user_id', (req, res) => {
   const userId = req.params.user_id;
   const role = req.query.role;
 
-  if (!userId || !role) {
-    return res.status(400).json({ message: 'user_id and role are required' });
+  if (!userId) {
+    return res.status(400).json({ message: 'user_id is required' });
   }
 
-  let tableName;
-  if (role === 'user') tableName = 'profile_info';
-  else if (role === 'mentor') tableName = 'mentor_profile_info';
-  else if (role === 'admin') tableName = 'admin_profile_info';
-  else return res.status(400).json({ message: 'Invalid role' });
-
-  const query = `SELECT resume_file FROM ${tableName} WHERE user_id = ?`;
+  // Query the new resumes table for active resume
+  const query = `
+    SELECT 
+      resume_id,
+      file_name,
+      file_path,
+      file_size,
+      file_type,
+      uploaded_at,
+      parsed_text IS NOT NULL as is_parsed
+    FROM resumes 
+    WHERE user_id = ? AND is_active = 1 
+    ORDER BY uploaded_at DESC 
+    LIMIT 1
+  `;
 
   db.query(query, [userId], (err, results) => {
     if (err) {
@@ -206,44 +225,84 @@ router.get('/get-resume/:user_id', (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'No resume info found', resume_file: '' });
+      return res.status(200).json({ 
+        message: 'No resume uploaded yet', 
+        resume_name: '',
+        has_resume: false
+      });
     }
 
-    res.status(200).json({ message: 'Resume info retrieved successfully', resume_name: results[0].resume_file });
+    const resume = results[0];
+    res.status(200).json({ 
+      message: 'Resume info retrieved successfully', 
+      resume_id: resume.resume_id,
+      resume_name: resume.file_name,
+      file_path: resume.file_path,
+      file_size: resume.file_size,
+      file_type: resume.file_type,
+      uploaded_at: resume.uploaded_at,
+      is_parsed: !!resume.is_parsed,
+      has_resume: true
+    });
   });
 });
 
 
-
-// POST Resume info
+// POST Resume upload (to resumes table)
 router.post('/upload-resume', upload.single('resume'), (req, res) => {
   const user_id = req.body.user_id;
-  const role = req.body.role;
-  const resume_file = req.file?.filename;
-
-  if (!user_id || !resume_file || !role) {
-    return res.status(400).json({ message: 'user_id, resume_file, and role are required' });
+  const role = req.body.role; // Keep for backward compatibility
+  
+  if (!user_id) {
+    return res.status(400).json({ message: 'user_id is required' });
+  }
+  
+  if (!req.file) {
+    return res.status(400).json({ message: 'Resume file is required' });
   }
 
-  let tableName;
-  if (role === 'user') tableName = 'profile_info';
-  else if (role === 'mentor') tableName = 'mentor_profile_info';
-  else if (role === 'admin') tableName = 'admin_profile_info';
-  else return res.status(400).json({ message: 'Invalid role' });
+  const file = req.file;
+  const file_name = file.originalname;
+  const file_path = file.filename;
+  const file_size = file.size;
+  
+  // Determine file type from extension
+  const ext = file_name.split('.').pop().toLowerCase();
+  const file_type = ['pdf', 'doc', 'docx'].includes(ext) ? ext : 'pdf';
 
-  const query = `
-    INSERT INTO ${tableName} (user_id, resume_file)
-    VALUES (?, ?)
-    ON DUPLICATE KEY UPDATE resume_file = VALUES(resume_file)
+  // First, deactivate any existing active resumes for this user
+  const deactivateQuery = `
+    UPDATE resumes 
+    SET is_active = 0 
+    WHERE user_id = ? AND is_active = 1
   `;
 
-  db.query(query, [user_id, resume_file], (err) => {
-    if (err) {
-      console.error('Error saving Resume info:', err);
-      return res.status(500).json({ message: 'Database error', error: err.message });
+  db.query(deactivateQuery, [user_id], (deactivateErr) => {
+    if (deactivateErr) {
+      console.error('Error deactivating old resumes:', deactivateErr);
+      // Continue anyway - not critical
     }
 
-    res.status(200).json({ message: 'Resume info saved successfully', success: true });
+    // Insert new resume
+    const insertQuery = `
+      INSERT INTO resumes (user_id, file_name, file_path, file_size, file_type, is_active)
+      VALUES (?, ?, ?, ?, ?, 1)
+    `;
+
+    db.query(insertQuery, [user_id, file_name, file_path, file_size, file_type], (err, result) => {
+      if (err) {
+        console.error('Error saving Resume to resumes table:', err);
+        return res.status(500).json({ message: 'Database error', error: err.message });
+      }
+
+      res.status(200).json({ 
+        message: 'Resume uploaded successfully', 
+        success: true,
+        resume_id: result.insertId,
+        file_name: file_name,
+        uploaded_at: new Date().toISOString()
+      });
+    });
   });
 });
 

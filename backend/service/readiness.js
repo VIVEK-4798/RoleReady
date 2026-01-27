@@ -562,21 +562,7 @@ router.post("/explicit-calculate", async (req, res) => {
   }
 });
 
-/* ============================================================================
-   🎭 STEP 6: DEMO-ONLY ENDPOINTS (ISOLATED FROM REAL DATA)
-   ============================================================================
-   
-   These endpoints are ONLY for the landing page demo.
-   
-   KEY DIFFERENCES FROM REAL ENDPOINTS:
-   1. Uses hardcoded DEMO_USER_ID (25)
-   2. Skills are stored with source='demo' 
-   3. Readiness calculation uses demo skills only
-   4. Results are NOT mixed with real user data
-   5. Clearly labeled as demo in responses
-   
-   Real users CANNOT use these endpoints - they must log in.
-   ============================================================================
+/* DEMO-ONLY ENDPOINTS (ISOLATED FROM REAL DATA)
 */
 
 const DEMO_USER_ID = 25; // Fixed demo user

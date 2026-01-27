@@ -38,6 +38,7 @@ const userActivityService = require('./service/userActivityService.js');
 const collegeService = require('./service/collegeService');
 const { router: readinessRoutes }  = require('./service/readiness.js');
 const rolesRoutes  = require('./service/roles.js');
+const resumeParserService = require('./service/resumeParser.js');  // STEP 3: Resume parsing
 
 // routes
 app.use('/api/user', userService);
@@ -60,6 +61,7 @@ app.use('/api/user-activity', userActivityService);
 app.use('/api/college', collegeService);
 app.use('/api/readiness', readinessRoutes);
 app.use("/api/roles", rolesRoutes);
+app.use('/api/resume-parser', resumeParserService);  // STEP 3: Resume parsing
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 

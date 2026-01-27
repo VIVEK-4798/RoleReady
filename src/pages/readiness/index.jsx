@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import DefaultHeader from '@/components/header/default-header';
 import Footer4 from '@/components/footer/footer-4';
 
@@ -17,10 +18,17 @@ import Footer4 from '@/components/footer/footer-4';
    ✅ Profile-driven - uses target_category_id from DB profile
    ✅ NO demo mode - demo is only on landing page
    ✅ All inputs from DB (locked contract from STEP 2)
+   
+   RESUME SKILL SYNC INTEGRATION:
+   ✅ Detects navigation from resume skill confirmation
+   ✅ Auto-triggers recalculation when arriving with recalculate: true state
+   ✅ Shows toast notification for resume skill context
+   ✅ Reuses 100% of existing readiness calculation logic
    ============================================================================ */
 
 const ReadinessPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   
   // ========== STATE ==========
   // Context state (Section A)
@@ -40,6 +48,10 @@ const ReadinessPage = () => {
   const [skillBreakdown, setSkillBreakdown] = useState([]);
   const [isLoadingBreakdown, setIsLoadingBreakdown] = useState(false);
   
+  // RESUME SKILL SYNC: Track if we came from resume confirmation
+  const [isFromResumeSync, setIsFromResumeSync] = useState(false);
+  const hasTriggeredRecalculate = useRef(false);
+  
   // User info - STEP 6: Strict login check
   const user = JSON.parse(localStorage.getItem("user"));
   const user_id = user?.user_id;
@@ -55,6 +67,55 @@ const ReadinessPage = () => {
       navigate("/login");
     }
   }, [user_id, navigate]);
+  
+  /* ========================================================================
+     RESUME SKILL SYNC: Detect navigation from resume confirmation
+     ======================================================================== 
+     
+     When user clicks "Recalculate Readiness" from the resume skill prompt,
+     they navigate here with state: { recalculate: true }
+     
+     This effect:
+     1. Detects the recalculate flag
+     2. Shows a contextual toast
+     3. Clears the navigation state (so refresh doesn't re-trigger)
+     4. Waits for context to load, then triggers recalculation
+     
+     Uses 100% of existing readiness calculation logic - no new engine needed.
+  */
+  useEffect(() => {
+    if (location.state?.recalculate && !hasTriggeredRecalculate.current) {
+      setIsFromResumeSync(true);
+      toast.info("📄 Recalculating readiness with your new resume skills...", {
+        autoClose: 3000,
+        icon: "🔄"
+      });
+      
+      // Clear the navigation state to prevent re-triggering on refresh
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+  
+  /* ========================================================================
+     RESUME SKILL SYNC: Auto-trigger recalculation after context loads
+     ======================================================================== */
+  useEffect(() => {
+    // Only trigger if:
+    // 1. We came from resume sync
+    // 2. Context is loaded with a valid target role
+    // 3. We haven't already triggered (prevent double-calculation)
+    if (
+      isFromResumeSync && 
+      context?.has_target_role && 
+      !isLoadingContext && 
+      !hasTriggeredRecalculate.current
+    ) {
+      hasTriggeredRecalculate.current = true;
+      
+      // Use force=true to bypass cooldown since user explicitly requested this
+      handleCalculateReadiness(true);
+    }
+  }, [isFromResumeSync, context, isLoadingContext]);
   
   /* ========================================================================
      HELPER: Get readiness status label based on percentage
@@ -268,7 +329,16 @@ const ReadinessPage = () => {
       setCalculationResult({
         ...result,
         _type: "success",
+        _fromResumeSync: isFromResumeSync, // Track if this was triggered by resume skill sync
       });
+      
+      // Show success toast with context
+      if (isFromResumeSync) {
+        toast.success(`✅ Readiness updated! Your resume skills are now included in your score.`, {
+          autoClose: 5000
+        });
+        setIsFromResumeSync(false); // Reset the flag
+      }
       
       // Refresh context to get updated last_calculated_at
       const contextResponse = await fetch(`${API_BASE}/readiness/context/${user_id}`);
@@ -896,7 +966,11 @@ const ReadinessPage = () => {
                       {/* STEP 5: Success message after calculation */}
                       {calculationResult?._type === "success" && (
                         <div className="readiness-score__success-hint">
-                          <p>✨ Score updated! View your <strong onClick={() => navigate('/vendor-dashboard/dashboard')} style={{cursor: 'pointer', textDecoration: 'underline'}}>Dashboard</strong> for history and trends.</p>
+                          {calculationResult._fromResumeSync ? (
+                            <p>📄 <strong>Resume skills included!</strong> Your readiness now reflects skills from your uploaded resume. View your <strong onClick={() => navigate('/vendor-dashboard/dashboard')} style={{cursor: 'pointer', textDecoration: 'underline'}}>Dashboard</strong> for history and trends.</p>
+                          ) : (
+                            <p>✨ Score updated! View your <strong onClick={() => navigate('/vendor-dashboard/dashboard')} style={{cursor: 'pointer', textDecoration: 'underline'}}>Dashboard</strong> for history and trends.</p>
+                          )}
                         </div>
                       )}
                     </div>
