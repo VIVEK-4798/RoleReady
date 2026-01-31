@@ -57,6 +57,9 @@ const Header1 = () => {
                       <Link to="/roadmap" className="nav-link" style={{ marginLeft: '10px' }}>
                         🧭 Roadmap
                       </Link>
+                      <Link to="/report" className="nav-link" style={{ marginLeft: '10px' }}>
+                        📊 Report
+                      </Link>
                     </>
                   )}
                   {(user === "mentor" || user === "admin") && (

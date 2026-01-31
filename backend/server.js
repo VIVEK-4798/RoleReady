@@ -41,6 +41,9 @@ const rolesRoutes  = require('./service/roles.js');
 const resumeParserService = require('./service/resumeParser.js');  // STEP 3: Resume parsing
 const mentorValidationService = require('./service/mentorValidation.js');  // Mentor validation
 const roadmapService = require('./service/roadmapService.js');  // Dynamic Roadmap
+const reportService = require('./service/reportService.js');  // Readiness Report
+const adminService = require('./service/adminService.js');  // Admin Benchmark Management
+const roleSelectionService = require('./service/roleSelectionService.js');  // Role Selection & Change
 
 // routes
 app.use('/api/user', userService);
@@ -66,6 +69,9 @@ app.use("/api/roles", rolesRoutes);
 app.use('/api/resume-parser', resumeParserService);  // STEP 3: Resume parsing
 app.use('/api/mentor-validation', mentorValidationService);  // Mentor validation
 app.use('/api/roadmap', roadmapService);  // Dynamic Roadmap
+app.use('/api/report', reportService);  // Readiness Report
+app.use('/api/admin', adminService);  // Admin Benchmark Management
+app.use('/api/role-selection', roleSelectionService);  // Role Selection & Change
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 

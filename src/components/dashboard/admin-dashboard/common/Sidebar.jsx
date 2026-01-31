@@ -5,6 +5,7 @@ import "../../../../styles/modals.css";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState();
+  const [openDropdowns, setOpenDropdowns] = useState({});
 
   const userRole = localStorage.getItem("role");
 
@@ -76,12 +77,24 @@ const Sidebar = () => {
       href: "categories",
       allowedRole: ["admin"],
     },
-    // Individual items from Settings
     {
       icon: "/img/dashboard/sidebar/gear.svg",
       title: "Jobs Category",
       href: "services",
       allowedRole: ["admin"],
+    },
+    // ============================================
+    // 📊 READINESS CONFIGURATION SECTION
+    // ============================================
+    {
+      icon: "/img/dashboard/sidebar/compass.svg",
+      title: "Readiness Config",
+      allowedRole: ["admin"],
+      links: [
+        { title: "📌 Roles", href: "admin-roles", allowedRole: ["admin"] },
+        { title: "📌 Skills", href: "admin-skills", allowedRole: ["admin"] },
+        { title: "📌 Benchmarks", href: "admin-benchmarks", allowedRole: ["admin"] },
+      ],
     },
     {
       icon: "/img/dashboard/sidebar/gear.svg",
@@ -97,6 +110,13 @@ const Sidebar = () => {
     const match = currentUrl.match(regex);
     if (match && match[1]) {
       setTab(match[1]);
+      
+      // Auto-open dropdown if current tab is in one
+      sidebarData.forEach((item, index) => {
+        if (item.links && item.links.some((link) => match[1] === link.href)) {
+          setOpenDropdowns(prev => ({ ...prev, [index]: true }));
+        }
+      });
     } else {
       setTab("No match found");
     }
@@ -105,6 +125,13 @@ const Sidebar = () => {
   const handleRoute = (path, newTab) => {
     setTab(newTab);
     navigate(path);
+  };
+
+  const toggleDropdown = (index) => {
+    setOpenDropdowns(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
   };
 
   const logout = () => {
@@ -148,21 +175,24 @@ const Sidebar = () => {
               className={`accordion__button ${
                 item.links.some((link) => tab === link.href) ? "side_current" : ""
               }`}
-              data-bs-toggle="collapse"
-              data-bs-target={`#sidebarItem${index}`}
+              onClick={() => toggleDropdown(index)}
+              style={{ cursor: 'pointer' }}
             >
               <div className="sidebar__button col-12 d-flex items-center justify-between">
                 <div className="d-flex items-center text-15 lh-1 fw-500">
                   <img src={item.icon} alt="image" className="mr-10" />
                   {item.title}
                 </div>
-                <div className="icon-chevron-sm-down text-7" />
+                <div className={`icon-chevron-sm-down text-7 ${openDropdowns[index] ? 'rotate-180' : ''}`} />
               </div>
             </div>
             <div
-              id={`sidebarItem${index}`}
-              className={`collapse ${item.links.some((link) => tab === link.href) ? "show" : ""}`}
-              data-bs-parent="#vendorSidebarMenu"
+              className={openDropdowns[index] ? "show" : ""}
+              style={{
+                display: openDropdowns[index] ? 'block' : 'none',
+                transition: 'all 0.3s ease',
+                overflow: 'hidden'
+              }}
             >
               <ul className="list-disc pb-5 pl-40">
                 {item.links.map((link, linkIndex) => {

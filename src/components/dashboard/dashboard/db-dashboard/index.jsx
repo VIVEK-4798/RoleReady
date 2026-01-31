@@ -6,6 +6,7 @@ import ChartMain from "./components/ChartMain";
 import { Link } from "react-router-dom";
 import RercentBooking from "./components/RercentBooking";
 import Footer from "../common/Footer";
+import TargetRoleCard from "../../../role-selection/TargetRoleCard";
 
 const index = () => {
   return (
@@ -31,12 +32,20 @@ const index = () => {
               <div className="col-12">
                 <h1 className="text-30 lh-14 fw-600">Dashboard</h1>
                 <div className="text-15 text-light-1">
-                  Lorem ipsum dolor sit amet, consectetur.
+                  Manage your profile and track your readiness.
                 </div>
               </div>
               {/* End .col-12 */}
             </div>
             {/* End .row */}
+
+            {/* Target Role Card - Important for users */}
+            <div className="row pb-30">
+              <div className="col-12">
+                <TargetRoleCard />
+              </div>
+            </div>
+            {/* End Target Role Card */}
 
             <DashboardCard />
 

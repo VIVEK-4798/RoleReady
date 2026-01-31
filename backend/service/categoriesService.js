@@ -17,9 +17,26 @@ app.post('/create-categories', (req, res) => {
 	});
 });
 
-// READ: Get all categories
+// READ: Get all categories with skill counts
 app.get('/get-categories', (req, res) => {
-	const query = 'SELECT * FROM categories';
+	const query = `
+		SELECT 
+			c.category_id,
+			c.category_name,
+			c.category_color_class,
+			c.description,
+			c.normalized_name,
+			c.domain,
+			c.is_active,
+			c.created_at,
+			c.updated_at,
+			c.updated_by,
+			COUNT(cs.skill_id) as skill_count
+		FROM categories c
+		LEFT JOIN category_skills cs ON c.category_id = cs.category_id
+		GROUP BY c.category_id
+		ORDER BY c.category_name
+	`;
 
 	db.query(query, (err, results) => {
 			if (err) {

@@ -116,9 +116,23 @@ const DashboardContent = ({
                         onCategorySelect(category.category_id);
                         setShowCategorySelector(false);
                       }}
-                      className={`btn ${categoryId == category.category_id ? 'btn-primary' : 'btn-outline-primary'} btn-sm`}
+                      className={`btn ${categoryId == category.category_id ? 'btn-primary' : 'btn-outline-primary'} btn-sm d-flex flex-column align-items-start text-start`}
+                      style={{ minWidth: '180px', padding: '12px 16px' }}
+                      title={category.description || category.category_name}
                     >
-                      {category.category_name}
+                      <span className="fw-600">{category.category_name}</span>
+                      {category.description && (
+                        <span className="text-11 opacity-75 mt-1" style={{ lineHeight: '1.3' }}>
+                          {category.description.length > 60 
+                            ? category.description.substring(0, 60) + '...' 
+                            : category.description}
+                        </span>
+                      )}
+                      {(category.skill_count || category.skill_count === 0) && (
+                        <span className="text-10 opacity-60 mt-1">
+                          📚 {category.skill_count} skills
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>

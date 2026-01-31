@@ -456,26 +456,47 @@ const RoadmapPage = () => {
                   </div>
                 </div>
                 
-                {/* Refresh Button */}
+                {/* Action Buttons */}
                 <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
-                  <button
-                    onClick={refreshRoadmap}
-                    disabled={isLoading}
-                    style={{
-                      padding: '0.5rem 1rem',
-                      backgroundColor: '#f1f5f9',
-                      color: '#475569',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '8px',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem'
-                    }}
-                  >
-                    🔄 Refresh Roadmap
-                  </button>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={refreshRoadmap}
+                      disabled={isLoading}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: '#f1f5f9',
+                        color: '#475569',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      🔄 Refresh Roadmap
+                    </button>
+                    
+                    {/* STEP 5: Export Readiness Report Button */}
+                    <button
+                      onClick={() => navigate('/report')}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: '#059669',
+                        color: '#ffffff',
+                        border: '1px solid #059669',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      📄 Export Report
+                    </button>
+                  </div>
                   <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem' }}>
                     Last generated: {new Date(roadmap.generated_at).toLocaleString()}
                   </p>

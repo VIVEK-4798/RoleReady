@@ -1,12 +1,23 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const [openDropdowns, setOpenDropdowns] = useState({});
+  
   function logoutHandler(e) {
     e.preventDefault();
     sessionStorage.clear();
     navigate("/login");
   }
+  
+  const toggleDropdown = (index) => {
+    setOpenDropdowns(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+  
   const sidebarData = [
         {
       icon: "/img/dashboard/sidebar/house.svg",
@@ -113,21 +124,23 @@ const Sidebar = () => {
               <div className="accordion__item">
                 <div
                   className="accordion__button"
-                  data-bs-toggle="collapse"
-                  data-bs-target={`#sidebarItem${index}`}
+                  onClick={() => toggleDropdown(index)}
+                  style={{ cursor: 'pointer' }}
                 >
                   <div className="sidebar__button col-12 d-flex items-center justify-between">
                     <div className="d-flex items-center text-15 lh-1 fw-500">
                       <img src={item.icon} alt="image" className="mr-10" />
                       {item.title}
                     </div>
-                    <div className="icon-chevron-sm-down text-7" />
+                    <div className={`icon-chevron-sm-down text-7 ${openDropdowns[index] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
                 <div
-                  id={`sidebarItem${index}`}
-                  className="collapse"
-                  data-bs-parent="#vendorSidebarMenu"
+                  style={{
+                    display: openDropdowns[index] ? 'block' : 'none',
+                    transition: 'all 0.3s ease',
+                    overflow: 'hidden'
+                  }}
                 >
                  <ul className="list-disc pt-15 pb-5 pl-40">
                   {item.links.map((link, linkIndex) => (

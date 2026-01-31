@@ -53,6 +53,9 @@ import AdminAddVendor from "./pages/dashboard/admin-dashboard/add-vendor";
 import Vendors from "./pages/dashboard/admin-dashboard/vendors";
 import Packages from "./pages/dashboard/admin-dashboard/packages";
 import Email from "./pages/dashboard/admin-dashboard/email";
+import AdminRoles from "./pages/dashboard/admin-dashboard/admin-roles";
+import AdminSkills from "./pages/dashboard/admin-dashboard/admin-skills";
+import AdminBenchmarks from "./pages/dashboard/admin-dashboard/admin-benchmarks";
 import DBDashboard from "./pages/dashboard/dashboard/db-dashboard";
 import DBBooking from "./pages/dashboard/dashboard/db-booking";
 import DBWishlist from "./pages/dashboard/dashboard/db-wishlist";
@@ -118,6 +121,7 @@ import MentorVenue from "./pages/dashboard/mentor-dashboard/venue";
 import MentorValidationQueue from "./pages/dashboard/mentor-dashboard/validation-queue";
 import ReadinessPage from "./pages/readiness";
 import RoadmapPage from "./pages/roadmap";
+import ReadinessReportPage from "./pages/report";
 
 
 function App() {
@@ -155,6 +159,7 @@ function App() {
               <Route path="collegeTPO" element={<CollegeTPO />} />
               <Route path="readiness" element={<ReadinessPage />} />
               <Route path="roadmap" element={<RoadmapPage />} />
+              <Route path="report" element={<ReadinessReportPage />} />
 
               <Route path="store">
                 <Route path=":project" element={<Home />} />
@@ -201,6 +206,10 @@ function App() {
                   <Route path="vendor/:mode" element={<AdminAddVendor />} />
                   <Route path="users" element={<Users />} />
                   <Route path="user/:mode" element={<AdminAddUser />} />
+                  {/* Readiness Config Routes */}
+                  <Route path="admin-roles" element={<AdminRoles />} />
+                  <Route path="admin-skills" element={<AdminSkills />} />
+                  <Route path="admin-benchmarks" element={<AdminBenchmarks />} />
                   {/* 
                   <Route path="booking" element={<AdminBooking />} />
                   <Route path="hotels" element={<BVAdminHotel />} />
